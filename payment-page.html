@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#bf8a47">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="AMAK Kiosk">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="AMAK Kiosk">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- PWA Icons -->
+    <link rel="icon" type="image/png" sizes="192x192" href="icon.png">
+    <link rel="apple-touch-icon" href="icon.png">
+    
+    <title>Payment - Ali, Muthu & Ah Hock</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background-color: #F5F5DC;
+        }
+
+        /* Header Section with Logo */
+        .header-section {
+            background-color: #bf8a47;
+            width: 100%;
+            height: 12vh;
+            display: flex;
+            align-items: center;
+            padding: 15px 40px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        /* Payment Container */
+        .payment-container {
+            background-image: url('wood.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 18px;
+            padding: 15px 70px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            min-width: 260px;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 30px;
+        }
+
+        .header-title img {
+            height: 30px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .logo-container {
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            height: 60%;
+            width: auto;
+            object-fit: contain;
+        }
+
+        /* Main Content - Samsung Tab A8 Optimized */
+        .main-content {
+            flex: 1;
+            width: 100%;
+            padding: 25px 40px;
+            overflow: hidden;
+            background-color: #F5F5DC;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Payment Methods Grid - Samsung Tab A8 Optimized */
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 20px;
+            max-width: 600px;
+            margin: 50px auto 0 auto;
+            width: 100%;
+            height: 280px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .payment-method {
+            background-color: #4A2C1A;
+            border: 2px solid #8B4513;
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+            height: 100%;
+            position: relative;
+        }
+
+        .payment-method:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            border-color: #FDB913;
+        }
+
+        .payment-method.selected {
+            border: 3px solid #FDB913;
+            background-color: #5D4037;
+        }
+
+        .payment-method img {
+            max-width: 100px;
+            max-height: 80px;
+            object-fit: contain;
+        }
+
+        .payment-icon {
+            font-size: 80px;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        /* Order Summary Card - Samsung Tab A8 Optimized */
+        .order-summary {
+            background-color: white;
+            border-radius: 15px;
+            padding: 0;
+            max-width: 600px;
+            max-height: 200px;
+            margin: 0 auto;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .summary-header {
+            background-color: #4A2C1A;
+            color: white;
+            padding: 12px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            flex-shrink: 0;
+        }
+
+        .summary-content {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .summary-items {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 12px;
+            max-height: 90px;
+            overflow-y: auto;
+            flex-shrink: 1;
+            min-height: 0;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            font-size: 14px;
+        }
+
+        .item-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .item-price {
+            font-weight: bold;
+            color: #bf8a47;
+        }
+
+        .summary-divider {
+            height: 2px;
+            background: #FDB913;
+            margin: 12px 0;
+            flex-shrink: 0;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+            flex-shrink: 0;
+        }
+
+        .total-label {
+            font-size: 18px;
+            font-weight: bold;
+            color: #bf8a47;
+            text-transform: uppercase;
+        }
+
+        .total-amount {
+            font-size: 20px;
+            font-weight: bold;
+            color: #bf8a47;
+        }
+
+        /* Footer Buttons - Samsung Tab A8 Optimized */
+        .footer-section {
+            background-color: #F5F5DC;
+            width: 100%;
+            padding: 10px 30px 15px 30px;
+            flex-shrink: 0;
+        }
+
+        .button-container {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            gap: 20px;
+        }
+
+        .back-button {
+            background-color: #4A2C1A;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 18px 40px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            flex: 0 0 180px;
+            margin-bottom: 95px;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.3);
+            background-color: #5D4037;
+        }
+
+        .pay-button {
+            background-color: #FDB913;
+            color: #362315;
+            border: none;
+            border-radius: 15px;
+            padding: 18px 40px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            flex: 1;
+            margin-bottom: 95px;
+        }
+
+        .pay-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.3);
+            background-color: #ffca28;
+        }
+
+        .pay-button:disabled {
+            background-color: #cccccc;
+            color: #666666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .back-button:active,
+        .pay-button:active {
+            transform: translateY(0);
+        }
+
+        /* Responsive Design */
+        /* Samsung A8 Tablet Portrait Mode - 1200x1920 */
+        @media (max-width: 1200px) and (min-height: 1900px) and (orientation: portrait) {
+            body {
+                height: 100vh;
+                overflow: hidden;
+            }
+
+            .header-section {
+                height: 6vh;
+                padding: 5px 25px;
+            }
+
+            .logo {
+                height: 65%;
+            }
+
+            .payment-container {
+                border-radius: 14px;
+                padding: 10px 50px;
+                min-width: 200px;
+            }
+
+            .header-title {
+                min-height: 26px;
+            }
+
+            .header-title img {
+                height: 26px;
+            }
+
+            .main-content {
+                padding: 6px 25px;
+                gap: 8px;
+                flex: 0 1 auto;
+                max-height: calc(100vh - 20vh);
+                overflow-y: auto;
+            }
+
+            .payment-methods {
+                max-width: 480px;
+                height: 180px;
+                gap: 10px;
+                margin-top: 40px;
+            }
+
+            .order-summary {
+                max-width: 480px;
+                max-height: 250px;
+                border-radius: 13px;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .summary-header {
+                padding: 7px 14px;
+                font-size: 13px;
+                flex-shrink: 0;
+            }
+
+            .summary-content {
+                padding: 8px;
+                display: flex;
+                flex-direction: column;
+                min-height: 0;
+                flex: 1;
+                overflow: hidden;
+            }
+
+            .summary-items {
+                gap: 4px;
+                margin-bottom: 7px;
+                max-height: 120px;
+                overflow-y: auto;
+                flex-shrink: 1;
+                min-height: 0;
+            }
+
+            .summary-item {
+                padding: 3px 0;
+                font-size: 11px;
+            }
+
+            .summary-divider {
+                margin: 10px 0;
+            }
+
+            .summary-total {
+                padding: 2px 0;
+            }
+
+            .total-label {
+                font-size: 10px;
+            }
+
+            .total-amount {
+                font-size: 10px;
+            }
+
+            .payment-method {
+                padding: 10px;
+                min-height: 80px;
+                border-radius: 10px;
+            }
+
+            .payment-method img {
+                max-width: 60px;
+                max-height: 45px;
+            }
+
+            .payment-icon {
+                font-size: 45px;
+            }
+
+            .footer-section {
+                padding: 8px 25px 12px 25px;
+                flex-shrink: 0;
+            }
+
+            .button-container {
+                gap: 12px;
+            }
+
+            .back-button {
+                padding: 12px 25px;
+                font-size: 15px;
+                flex: 0 0 120px;
+                border-radius: 12px;
+            }
+
+            .pay-button {
+                padding: 12px 25px;
+                font-size: 15px;
+                border-radius: 12px;
+            }
+        }
+
+        /* Samsung A8 Tablet Landscape Mode - 1280x800 KIOSK MODE */
+        @media (min-width: 1200px) and (max-width: 1300px) and (min-height: 750px) and (max-height: 850px) and (orientation: landscape) {
+            body {
+                height: 100vh;
+                overflow: hidden;
+            }
+
+            .header-section {
+                height: 7vh;
+                padding: 6px 30px;
+            }
+
+            .logo {
+                height: 60%;
+            }
+
+            .payment-container {
+                border-radius: 13px;
+                padding: 8px 45px;
+                min-width: 210px;
+            }
+
+            .header-title {
+                min-height: 22px;
+            }
+
+            .header-title img {
+                height: 20px;
+            }
+
+            .main-content {
+                padding: 6px 30px;
+                gap: 8px;
+                flex: 0 1 auto;
+                max-height: calc(100vh - 18vh);
+                overflow-y: auto;
+            }
+
+            .payment-methods {
+                max-width: 520px;
+                height: 180px;
+                gap: 10px;
+                margin-top: 40px;
+            }
+
+            .order-summary {
+                max-width: 520px;
+                max-height: 250px;
+                border-radius: 12px;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .summary-header {
+                padding: 6px 12px;
+                font-size: 13px;
+                flex-shrink: 0;
+            }
+
+            .summary-content {
+                padding: 8px;
+                display: flex;
+                flex-direction: column;
+                min-height: 0;
+                flex: 1;
+                overflow: hidden;
+            }
+
+            .summary-items {
+                gap: 3px;
+                margin-bottom: 6px;
+                max-height: 120px;
+                overflow-y: auto;
+                flex-shrink: 1;
+                min-height: 0;
+            }
+
+            .summary-item {
+                padding: 2px 0;
+                font-size: 10px;
+            }
+
+            .summary-divider {
+                margin: 6px 0;
+            }
+
+            .summary-total {
+                padding: 3px 0;
+            }
+
+            .total-label {
+                font-size: 13px;
+            }
+
+            .total-amount {
+                font-size: 15px;
+            }
+
+            .payment-method {
+                padding: 10px;
+                min-height: 80px;
+                border-radius: 9px;
+            }
+
+            .payment-method img {
+                max-width: 65px;
+                max-height: 45px;
+            }
+
+            .payment-icon {
+                font-size: 45px;
+            }
+
+            .footer-section {
+                padding: 8px 30px 12px 30px;
+                flex-shrink: 0;
+            }
+
+            .button-container {
+                gap: 12px;
+            }
+
+            .back-button {
+                padding: 14px 24px;
+                font-size: 15px;
+                flex: 0 0 120px;
+                border-radius: 12px;
+            }
+
+            .pay-button {
+                padding: 14px 24px;
+                font-size: 15px;
+                border-radius: 12px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .payment-container {
+                border-radius: 18px;
+                padding: 16px 80px;
+                min-width: 250px;
+            }
+
+            .header-title {
+                min-height: 35px;
+            }
+
+            .header-title img {
+                height: 35px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px 25px;
+                gap: 25px;
+            }
+
+            .payment-container {
+                border-radius: 16px;
+                padding: 14px 50px;
+                min-width: 180px;
+            }
+
+            .header-title {
+                min-height: 28px;
+            }
+
+            .header-title img {
+                height: 28px;
+            }
+
+            .payment-methods {
+                grid-template-columns: 1fr;
+                gap: 15px;
+                max-width: 400px;
+                height: auto;
+                margin-top: 40px;
+            }
+
+            .payment-method {
+                min-height: 120px;
+                padding: 30px 20px;
+            }
+
+            .order-summary {
+                max-width: 400px;
+                max-height: 280px;
+            }
+
+            .button-container {
+                flex-direction: column;
+            }
+
+            .back-button {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with Logo -->
+    <div class="header-section">
+        <div class="logo-container">
+            <img src="logo old.png" alt="Ali, Muthu & Ah Hock" class="logo">
+        </div>
+        <div class="payment-container">
+            <div class="header-title" id="paymentTitle" data-translate="payment">Payment</div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Payment Methods -->
+        <div class="payment-methods">
+            <div class="payment-method" data-method="card" onclick="selectPaymentMethod('card')">
+                <img src="card.png" alt="Card Payment" style="max-width: 100px;">
+            </div>
+            <div class="payment-method" data-method="touchngo" onclick="selectPaymentMethod('touchngo')">
+                <img src="touch N Go.png" alt="Touch 'n Go" style="max-width: 100px;">
+            </div>
+            <div class="payment-method" data-method="cash" onclick="selectPaymentMethod('cash')">
+                <div class="payment-icon">💵</div>
+            </div>
+            <div class="payment-method" data-method="qr" onclick="selectPaymentMethod('qr')">
+                <img src="qr.png" alt="QR Code" style="max-width: 100px;">
+            </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="order-summary">
+            <div class="summary-header" data-translate="orderSummary">Order Summary</div>
+            <div class="summary-content">
+                <div class="summary-items" id="summaryItems">
+                    <!-- Items will be loaded here -->
+                </div>
+                <div class="summary-divider"></div>
+                <div class="summary-total">
+                    <div class="total-label" data-translate="total">Total</div>
+                    <div class="total-amount" id="totalAmount">RM 0.00</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Buttons -->
+    <div class="footer-section">
+        <div class="button-container">
+            <button class="back-button" onclick="goBack()" data-translate="back">BACK</button>
+            <button class="pay-button" id="payButton" onclick="processPayment()" data-translate="payHere">PAY HERE</button>
+        </div>
+    </div>
+
+    <!-- Translation System -->
+    <script src="translations.js"></script>
+    
+    <script>
+        let selectedPaymentMethod = null;
+        let cartItems = [];
+        let totalAmount = 0;
+
+        // Load cart and display order summary
+        function loadOrderSummary() {
+            console.log('Loading order summary...');
+            
+            const savedCart = localStorage.getItem('amakiosk_cart');
+            if (savedCart) {
+                cartItems = JSON.parse(savedCart);
+                console.log('Cart items:', cartItems);
+            }
+
+            const summaryContainer = document.getElementById('summaryItems');
+            
+            if (cartItems.length === 0) {
+                summaryContainer.innerHTML = `<div class="summary-item"><div class="item-name">No items in cart</div></div>`;
+                totalAmount = 0;
+            } else {
+                summaryContainer.innerHTML = cartItems.map(item => {
+                    const itemTotal = item.price * item.quantity;
+                    return `
+                        <div class="summary-item">
+                            <div class="item-name">${item.name} ${item.quantity > 1 ? 'x ' + item.quantity : ''}</div>
+                            <div class="item-price">RM ${itemTotal.toFixed(2)}</div>
+                        </div>
+                    `;
+                }).join('');
+
+                totalAmount = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            }
+
+            document.getElementById('totalAmount').textContent = `RM ${totalAmount.toFixed(2)}`;
+            console.log('Total amount:', totalAmount);
+        }
+
+        // Select payment method
+        function selectPaymentMethod(method) {
+            console.log('Payment method selected:', method);
+            
+            // Remove selection from all
+            document.querySelectorAll('.payment-method').forEach(el => {
+                el.classList.remove('selected');
+            });
+
+            // Add selection to clicked one
+            document.querySelector(`[data-method="${method}"]`).classList.add('selected');
+            
+            selectedPaymentMethod = method;
+            
+            // Enable pay button
+            document.getElementById('payButton').disabled = false;
+        }
+
+        // Go back to cart
+        function goBack() {
+            window.location.href = 'cart-page.html';
+        }
+
+        // Process payment
+        function processPayment() {
+            console.log('processPayment function called');
+            
+            if (!selectedPaymentMethod) {
+                alert('Please select a payment method');
+                return;
+            }
+
+            if (cartItems.length === 0) {
+                alert('Your cart is empty');
+                return;
+            }
+
+            console.log('Processing payment...');
+            console.log('Payment method:', selectedPaymentMethod);
+            console.log('Total amount:', totalAmount);
+
+            // Disable pay button to prevent double clicks
+            const payButton = document.querySelector('.pay-button');
+            if (payButton) {
+                payButton.disabled = true;
+                payButton.textContent = 'PROCESSING...';
+                payButton.style.opacity = '0.6';
+            }
+
+            // Generate order number
+            const orderNumber = Math.floor(Math.random() * 900) + 100; // 100-999
+            
+            // Store order number for success page BEFORE clearing cart
+            localStorage.setItem('lastOrderNumber', orderNumber);
+            localStorage.setItem('lastPaymentMethod', selectedPaymentMethod);
+            
+            console.log('Order number generated:', orderNumber);
+            
+            // Clear cart after successful payment
+            localStorage.removeItem('amakiosk_cart');
+            localStorage.removeItem('kioskCartTotal');
+            
+            // IMMEDIATE REDIRECT - NO DELAYS
+            window.location.replace('payment-success.html');
+        }
+
+        // Initialize on page load
+        // Update payment title based on language
+        function updatePaymentTitle() {
+            const currentLang = localStorage.getItem('kioskLanguage') || 'en';
+            const paymentTitle = document.getElementById('paymentTitle');
+            
+            try {
+                // English & Malay: Use IMAGE fonts
+                if (currentLang === 'en' || currentLang === 'ms') {
+                    const imageSrc = (currentLang === 'ms') ? 'carapembayaranfont.png' : 'pmfont.png';
+                    
+                    const img = document.createElement('img');
+                    img.src = imageSrc;
+                    img.alt = 'Payment Method';
+                    img.style.cssText = 'height: 30px; width: auto; object-fit: contain; display: block;';
+                    
+                    img.onerror = function() {
+                        console.error('Failed to load payment title image:', imageSrc);
+                        paymentTitle.textContent = t('payment');
+                        paymentTitle.style.color = '#ffffff';
+                        paymentTitle.style.fontSize = '24px';
+                        paymentTitle.style.fontWeight = 'bold';
+                        paymentTitle.style.textShadow = '2px 2px 4px rgba(0,0,0,0.5)';
+                    };
+                    
+                    paymentTitle.innerHTML = '';
+                    paymentTitle.appendChild(img);
+                } 
+                // Tamil & Chinese: Use TEXT translations
+                else {
+                    paymentTitle.textContent = t('payment');
+                    paymentTitle.style.color = '#ffffff';
+                    paymentTitle.style.fontSize = '24px';
+                    paymentTitle.style.fontWeight = 'bold';
+                    paymentTitle.style.textShadow = '2px 2px 4px rgba(0,0,0,0.5)';
+                }
+            } catch (error) {
+                console.log('Error updating payment title:', error);
+                paymentTitle.textContent = t('payment');
+                paymentTitle.style.color = '#ffffff';
+                paymentTitle.style.fontSize = '24px';
+                paymentTitle.style.fontWeight = 'bold';
+                paymentTitle.style.textShadow = '2px 2px 4px rgba(0,0,0,0.5)';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Payment page loaded');
+            
+            // Initialize translations safely
+            try {
+                if (typeof updatePageTranslations === 'function') {
+                    updatePageTranslations();
+                }
+            } catch (error) {
+                console.log('Translation system not available, continuing without it');
+            }
+            
+            // Update payment title based on language
+            updatePaymentTitle();
+            
+            loadOrderSummary();
+            
+            // Disable pay button initially
+            document.getElementById('payButton').disabled = true;
+        });
+    </script>
+</body>
+</html>
+
