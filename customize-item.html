@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#bf8a47">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="AMAK Kiosk">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="AMAK Kiosk">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- PWA Icons -->
+    <link rel="icon" type="image/png" sizes="192x192" href="icon.png">
+    <link rel="apple-touch-icon" href="icon.png">
+    
+    <title>Customize Item - Ali, Muthu & Ah Hock</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background-color: #efebce;
+        }
+
+        /* Header Section with Logo */
+        .header-section {
+            background-color: #bf8a47;
+            width: 100%;
+            height: 12vh;
+            display: flex;
+            align-items: center;
+            padding: 15px 40px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        /* Notification Badge */
+        .notification-badge {
+            position: absolute;
+            top: 15px;
+            right: 40px;
+            background-color: #f7b817;
+            color: #362315;
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            display: none;
+            max-width: 350px;
+            animation: slideInRight 0.4s ease-out;
+            z-index: 100;
+        }
+
+        .notification-badge.show {
+            display: block;
+        }
+
+        .notification-badge-title {
+            font-size: 14px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            opacity: 0.8;
+        }
+
+        .notification-badge-content {
+            font-size: 16px;
+            line-height: 1.4;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Customize Container */
+        .customize-container {
+            background-image: url('wood.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 20px;
+            padding: 20px 90px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            min-width: 350px;
+            height: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            min-height: 45px;
+        }
+
+        .header-title img {
+            height: 42px;
+            width: auto;
+            object-fit: contain;
+            display: block;
+        }
+
+        .logo-container {
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            height: 60%;
+            width: auto;
+            object-fit: contain;
+        }
+
+        /* Main Content Section */
+        .content-section {
+            flex: 1;
+            width: 100%;
+            padding: 12px 40px;
+            overflow: hidden;
+            background-color: #efebce;
+        }
+
+        .content-container {                              
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            height: 100%;
+        }
+
+        /* Item Display Card */
+        .item-card {
+            background-color: #ffffff;
+            border-radius: 25px;
+            padding: 18px 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 25px;
+            flex-shrink: 0;
+        }
+
+        .item-image-container {
+            background-color: #f5f5f5;
+            border-radius: 20px;
+            width: 160px;
+            height: 160px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .item-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .item-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .item-name {
+            font-size: 22px;
+            font-weight: bold;
+            color: #000000;
+            text-align: center;
+        }
+
+        .item-price {
+            font-size: 28px;
+            font-weight: bold;
+            color: #bf8a47;
+        }
+
+        /* Customization Options Card */
+        .customization-card {
+            background-color: #ffffff;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .customization-header {
+            background-color: #362315;
+            color: white;
+            padding: 12px 30px;
+            font-size: 19px;
+            font-weight: bold;
+            text-transform: uppercase;
+            flex-shrink: 0;
+        }
+
+        .customization-body {
+            padding: 12px 30px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            overflow: hidden;
+        }
+
+        .customization-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .customization-option:last-child {
+            border-bottom: none;
+        }
+
+        .option-label {
+            font-size: 17px;
+            font-weight: 600;
+            color: #000000;
+            flex: 1;
+        }
+
+        .option-price {
+            font-size: 15px;
+            color: #666666;
+            margin-right: 12px;
+        }
+
+        /* Quantity Controls for Options */
+        .option-quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .option-qty-btn {
+            width: 38px;
+            height: 38px;
+            border: none;
+            border-radius: 8px;
+            background-color: #362315;
+            color: white;
+            font-size: 22px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .option-qty-btn:hover {
+            background-color: #4a3020;
+            transform: scale(1.1);
+        }
+
+        .option-qty-btn:active {
+            transform: scale(0.95);
+        }
+        .option-qty-btn.option-qty-btn-ice {
+            min-width: 44px; width: auto; padding: 0 10px; font-size: 15px;
+        }
+
+        .option-qty-display {
+            font-size: 18px;
+            font-weight: bold;
+            color: #362315;
+            min-width: 32px;
+            text-align: center;
+        }
+
+        /* Footer Buttons Section */
+        .footer-section {
+            background-color: #efebce;
+            width: 100%;
+            padding: 12px 40px 15px 40px;
+            flex-shrink: 0;
+        }
+
+        .button-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            gap: 25px;
+        }
+
+        .back-button {
+            background-color: #362315;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 16px 40px;
+            font-size: 21px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            flex: 0 0 200px;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+            background-color: #4a3020;
+        }
+
+        .pay-button {
+            background-color: #f7b817;
+            color: #362315;
+            border: none;
+            border-radius: 20px;
+            padding: 16px 40px;
+            font-size: 21px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            flex: 1;
+        }
+
+        .pay-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+            background-color: #ffca28;
+        }
+
+        .back-button:active,
+        .pay-button:active {
+            transform: translateY(0);
+        }
+
+        /* Samsung A8 Tablet Portrait Mode - 1200x1920 */
+        @media (max-width: 1200px) and (min-height: 1900px) and (orientation: portrait) {
+            body {
+                height: 100vh;
+                overflow: hidden;
+            }
+
+            .header-section {
+                height: 6vh;
+                padding: 5px 25px;
+            }
+
+            .logo {
+                height: 55%;
+            }
+
+            .customize-container {
+                padding: 12px 55px;
+            }
+
+            .header-title {
+                min-height: 28px;
+            }
+
+            .header-title img {
+                height: 26px;
+            }
+
+            .notification-badge {
+                top: 6px;
+                right: 25px;
+                padding: 6px 12px;
+                font-size: 10px;
+                max-width: 240px;
+                border-radius: 10px;
+            }
+
+            .notification-badge-title {
+                font-size: 9px;
+                margin-bottom: 2px;
+            }
+
+            .notification-badge-content {
+                font-size: 10px;
+                line-height: 1.3;
+            }
+
+            .content-section {
+                padding: 4px 25px;
+                flex: 0 1 auto;
+                max-height: calc(100vh - 20vh);
+                overflow-y: auto;
+            }
+
+            .content-container {
+                gap: 4px;
+            }
+
+            .item-card {
+                padding: 8px 15px;
+                gap: 12px;
+                border-radius: 18px;
+            }
+
+            .item-image-container {
+                width: 80px;
+                height: 80px;
+                border-radius: 15px;
+            }
+
+            .item-info {
+                gap: 6px;
+            }
+
+            .item-name {
+                font-size: 14px;
+            }
+
+            .item-price {
+                font-size: 18px;
+            }
+
+            .customization-card {
+                border-radius: 18px;
+            }
+
+            .customization-header {
+                padding: 6px 15px;
+                font-size: 13px;
+            }
+
+            .customization-body {
+                padding: 6px 15px;
+            }
+
+            .customization-option {
+                padding: 3px 0;
+            }
+
+            .option-label {
+                font-size: 12px;
+            }
+
+            .option-price {
+                font-size: 10px;
+                margin-right: 8px;
+            }
+
+            .option-quantity-controls {
+                gap: 7px;
+            }
+
+            .option-qty-btn {
+                width: 26px;
+                height: 26px;
+                font-size: 14px;
+            }
+
+            .option-qty-display {
+                font-size: 13px;
+                min-width: 22px;
+            }
+
+            .footer-section {
+                padding: 10px 25px 15px 25px;
+                flex-shrink: 0;
+            }
+
+            .button-container {
+                gap: 12px;
+            }
+
+            .back-button {
+                padding: 12px 25px;
+                font-size: 15px;
+                flex: 0 0 120px;
+                border-radius: 15px;
+            }
+
+            .pay-button {
+                padding: 12px 25px;
+                font-size: 15px;
+                border-radius: 15px;
+            }
+        }
+
+        /* Samsung A8 Tablet Landscape Mode - 1280x800 KIOSK MODE */
+        @media (min-width: 1200px) and (max-width: 1300px) and (min-height: 750px) and (max-height: 850px) and (orientation: landscape) {
+            body {
+                height: 100vh;
+                overflow: hidden;
+            }
+
+            .header-section {
+                height: 7vh;
+                padding: 6px 30px;
+            }
+
+            .logo {
+                height: 55%;
+            }
+
+            .customize-container {
+                padding: 8px 45px;
+            }
+
+            .header-title {
+                min-height: 22px;
+            }
+
+            .header-title img {
+                height: 20px;
+            }
+
+            .notification-badge {
+                top: 8px;
+                right: 30px;
+                padding: 5px 10px;
+                font-size: 10px;
+                max-width: 240px;
+                border-radius: 9px;
+            }
+
+            .notification-badge-title {
+                font-size: 8px;
+                margin-bottom: 2px;
+            }
+
+            .notification-badge-content {
+                font-size: 10px;
+                line-height: 1.2;
+            }
+
+            .content-section {
+                padding: 4px 30px;
+                flex: 0 1 auto;
+                max-height: calc(100vh - 18vh);
+                overflow-y: auto;
+            }
+
+            .content-container {
+                gap: 4px;
+            }
+
+            .item-card {
+                padding: 8px 14px;
+                gap: 12px;
+                border-radius: 16px;
+            }
+
+            .item-image-container {
+                width: 65px;
+                height: 65px;
+                border-radius: 12px;
+            }
+
+            .item-info {
+                gap: 5px;
+            }
+
+            .item-name {
+                font-size: 13px;
+            }
+
+            .item-price {
+                font-size: 16px;
+            }
+
+            .customization-card {
+                border-radius: 16px;
+            }
+
+            .customization-header {
+                padding: 6px 14px;
+                font-size: 12px;
+            }
+
+            .customization-body {
+                padding: 6px 14px;
+            }
+
+            .customization-option {
+                padding: 4px 0;
+            }
+
+            .option-label {
+                font-size: 11px;
+            }
+
+            .option-price {
+                font-size: 9px;
+                margin-right: 7px;
+            }
+
+            .option-quantity-controls {
+                gap: 6px;
+            }
+
+            .option-qty-btn {
+                width: 24px;
+                height: 24px;
+                font-size: 13px;
+            }
+
+            .option-qty-display {
+                font-size: 12px;
+                min-width: 20px;
+            }
+
+            .footer-section {
+                padding: 10px 30px 15px 30px;
+                flex-shrink: 0;
+            }
+
+            .button-container {
+                gap: 12px;
+            }
+
+            .back-button {
+                padding: 14px 24px;
+                font-size: 15px;
+                flex: 0 0 120px;
+                border-radius: 13px;
+            }
+
+            .pay-button {
+                padding: 14px 24px;
+                font-size: 15px;
+                border-radius: 13px;
+            }
+        }
+
+        /* Tablet responsive */
+        @media (min-width: 1200px) and (max-width: 1920px) and (min-height: 800px) {
+            .customize-container {
+                border-radius: 18px;
+                padding: 15px 85px;
+                min-width: 280px;
+            }
+
+            .header-title {
+                min-height: 35px;
+            }
+
+            .header-title img {
+                height: 35px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .customize-container {
+                border-radius: 22px;
+                padding: 20px 100px;
+                min-width: 280px;
+            }
+
+            .header-title {
+                min-height: 42px;
+            }
+
+            .header-title img {
+                height: 42px;
+            }
+
+            .content-section {
+                overflow-y: auto;
+            }
+
+            .item-card {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .item-image-container {
+                width: 240px;
+                height: 240px;
+            }
+
+            .item-name {
+                font-size: 22px;
+            }
+
+            .item-price {
+                font-size: 28px;
+            }
+
+            .option-label {
+                font-size: 18px;
+            }
+
+            .option-qty-btn {
+                width: 38px;
+                height: 38px;
+            }
+
+            .option-qty-display {
+                font-size: 19px;
+            }
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .header-section {
+                height: 12vh;
+                padding: 15px 40px;
+            }
+
+            .customize-container {
+                border-radius: 18px;
+                padding: 18px 60px;
+                min-width: 200px;
+            }
+
+            .header-title {
+                min-height: 32px;
+            }
+
+            .header-title img {
+                height: 32px;
+            }
+
+            .content-section {
+                padding: 15px 20px;
+                overflow-y: auto;
+            }
+
+            .item-card {
+                padding: 20px;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .item-image-container {
+                width: 200px;
+                height: 200px;
+            }
+
+            .customization-option {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .button-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .back-button {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with Logo -->
+    <div class="header-section">
+        <div class="logo-container">
+            <img src="logo old.png" alt="Ali, Muthu & Ah Hock" class="logo">
+        </div>
+        <div class="customize-container">
+            <div class="header-title" id="customizeTitle" data-translate="customize">Customize</div>
+        </div>
+        <!-- Notification Badge -->
+        <div class="notification-badge" id="notificationBadge">
+            <div class="notification-badge-title" data-translate="addonsSelected">Add-ons Selected:</div>
+            <div class="notification-badge-content" id="notificationContent"></div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content-section">
+        <div class="content-container">
+            <!-- Item Display Card -->
+            <div class="item-card">
+                <div class="item-image-container">
+                    <img src="placeholder.png" alt="Item" class="item-image" id="itemImage">
+                </div>
+                <div class="item-info">
+                    <div class="item-name" id="itemName">Item Name</div>
+                    <div class="item-price" id="itemPrice">RM 0.00</div>
+                </div>
+            </div>
+
+            <!-- Customization Options Card -->
+            <div class="customization-card">
+                <div class="customization-header" data-translate="customizationOptions">
+                    CUSTOMIZATION OPTIONS
+                </div>
+                <div class="customization-body" id="customizationOptions">
+                    <!-- Customization options will be dynamically inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Buttons -->
+    <div class="footer-section">
+        <div class="button-container">
+            <button class="back-button" onclick="goBack()" data-translate="back">BACK</button>
+            <button class="pay-button" onclick="saveCustomization()" data-translate="saveAdd">SAVE & ADD TO CART</button>
+        </div>
+    </div>
+
+    <!-- Translation System -->
+    <script src="translations.js"></script>
+
+    <script>
+        // Get item data from URL parameters or localStorage
+        let currentItem = null;
+        let customizationQuantities = {}; // Track quantity for each option
+        let basePrice = 0;
+        let isEditingCartItem = false; // Track if we're editing an existing cart item
+        let editingCartIndex = -1; // Index of item being edited
+
+        // Item-specific customization options
+        const itemCustomizations = {
+            // TOAST BREAD / TOAST BREAD SET
+            'toast bread': [
+                { id: 'butter', name: 'Butter', name_ms: 'Mentega', name_ta: 'வெண்ணெய்', name_zh: '黄油', price: 2.00 },
+                { id: 'kaya', name: 'Kaya', name_ms: 'Kaya', name_ta: 'கயா', name_zh: '咖椰', price: 2.00 }
+            ],
+            // ROTI JALA
+            'roti jala': [
+                { id: 'curry', name: 'Curry', name_ms: 'Kari', name_ta: 'கறி', name_zh: '咖喱', price: 2.00 }
+            ],
+            // AH HOCK KEN NOODLES
+            'ah hock ken noodles': [
+                { id: 'prawn', name: 'Prawn', name_ms: 'Udang', name_ta: 'இறால்', name_zh: '虾', price: 3.00 },
+                { id: 'hot_spicy_sauce', name: 'Hot and Spicy Sauce', name_ms: 'Sos Pedas', name_ta: 'காரமான சாஸ்', name_zh: '辣酱', price: 3.00 },
+                { id: 'barbeque_sauce', name: 'Barbeque Sauce', name_ms: 'Sos BBQ', name_ta: 'பார்பிக்யூ சாஸ்', name_zh: '烧烤酱', price: 1.00 }
+            ],
+            // ASSAM LAKSA
+            'assam laksa': [
+                { id: 'minced_chicken', name: 'Minced Chicken', name_ms: 'Ayam Cincang', name_ta: 'கோழி துண்டு', name_zh: '鸡肉碎', price: 3.00 },
+                { id: 'hot_spicy_sauce', name: 'Hot and Spicy Sauce', name_ms: 'Sos Pedas', name_ta: 'காரமான சாஸ்', name_zh: '辣酱', price: 3.00 },
+                { id: 'barbeque_sauce', name: 'Barbeque Sauce', name_ms: 'Sos BBQ', name_ta: 'பார்பிக்யூ சாஸ்', name_zh: '烧烤酱', price: 1.00 }
+            ],
+            // BIHUN GORENG
+            'bihun goreng': [
+                { id: 'minced_chicken', name: 'Minced Chicken', name_ms: 'Ayam Cincang', name_ta: 'கோழி துண்டு', name_zh: '鸡肉碎', price: 3.00 },
+                { id: 'hot_spicy_sauce', name: 'Hot and Spicy Sauce', name_ms: 'Sos Pedas', name_ta: 'காரமான சாஸ்', name_zh: '辣酱', price: 1.00 },
+                { id: 'barbeque_sauce', name: 'Barbeque Sauce', name_ms: 'Sos BBQ', name_ta: 'பார்பிக்யூ சாஸ்', name_zh: '烧烤酱', price: 1.00 }
+            ],
+            // MEE SOTO
+            'mee soto': [
+                { id: 'minced_chicken', name: 'Minced Chicken', name_ms: 'Ayam Cincang', name_ta: 'கோழி துண்டு', name_zh: '鸡肉碎', price: 3.00 },
+                { id: 'fried_potato', name: 'Fried Potato', name_ms: 'Kentang Goreng', name_ta: 'பொரித்த உருளைக்கிழங்கு', name_zh: '炸土豆', price: 3.00 },
+                { id: 'hot_spicy_sauce', name: 'Hot and Spicy Sauce', name_ms: 'Sos Pedas', name_ta: 'காரமான சாஸ்', name_zh: '辣酱', price: 1.00 },
+                { id: 'barbeque_sauce', name: 'Barbeque Sauce', name_ms: 'Sos BBQ', name_ta: 'பார்பிக்யூ சாஸ்', name_zh: '烧烤酱', price: 1.00 }
+            ],
+            // BIHUN SOTO (Soto Bihun)
+            'bihun soto': [
+                { id: 'minced_chicken', name: 'Minced Chicken', name_ms: 'Ayam Cincang', name_ta: 'கோழி துண்டு', name_zh: '鸡肉碎', price: 3.00 },
+                { id: 'fried_potato', name: 'Fried Potato', name_ms: 'Kentang Goreng', name_ta: 'பொரித்த உருளைக்கிழங்கு', name_zh: '炸土豆', price: 3.00 },
+                { id: 'hot_spicy_sauce', name: 'Hot and Spicy Sauce', name_ms: 'Sos Pedas', name_ta: 'காரமான சாஸ்', name_zh: '辣酱', price: 1.00 },
+                { id: 'barbeque_sauce', name: 'Barbeque Sauce', name_ms: 'Sos BBQ', name_ta: 'பார்பிக்யூ சாஸ்', name_zh: '烧烤酱', price: 1.00 }
+            ],
+            // CANTONESE NOODLES
+            'cantonese noodles': [
+                { id: 'chicken', name: 'Chicken', name_ms: 'Ayam', name_ta: 'கோழி', name_zh: '鸡肉', price: 3.00 },
+                { id: 'fried_onion', name: 'Fried Onion', name_ms: 'Bawang Goreng', name_ta: 'வறுத்த வெங்காயம்', name_zh: '炸洋葱', price: 2.00 },
+                { id: 'hot_spicy_sauce', name: 'Hot and Spicy Sauce', name_ms: 'Sos Pedas', name_ta: 'காரமான சாஸ்', name_zh: '辣酱', price: 1.00 },
+                { id: 'barbeque_sauce', name: 'Barbeque Sauce', name_ms: 'Sos BBQ', name_ta: 'பார்பிக்யூ சாஸ்', name_zh: '烧烤酱', price: 1.00 }
+            ],
+            // KUEY TEOW
+            'kuey teow': [
+                { id: 'fried_onion', name: 'Fried Onion', name_ms: 'Bawang Goreng', name_ta: 'வறுத்த வெங்காயம்', name_zh: '炸洋葱', price: 2.00 },
+                { id: 'hot_spicy_sauce', name: 'Hot and Spicy Sauce', name_ms: 'Sos Pedas', name_ta: 'காரமான சாஸ்', name_zh: '辣酱', price: 1.00 },
+                { id: 'barbeque_sauce', name: 'Barbeque Sauce', name_ms: 'Sos BBQ', name_ta: 'பார்பிக்யூ சாஸ்', name_zh: '烧烤酱', price: 1.00 }
+            ],
+            // MEE GORENG
+            'mee goreng': [
+                { id: 'fried_onion', name: 'Fried Onion', name_ms: 'Bawang Goreng', name_ta: 'வறுத்த வெங்காயம்', name_zh: '炸洋葱', price: 2.00 },
+                { id: 'fried_egg', name: 'Fried Egg', name_ms: 'Telur Goreng', name_ta: 'வறுத்த முட்டை', name_zh: '煎蛋', price: 2.00 },
+                { id: 'hot_spicy_sauce', name: 'Hot and Spicy Sauce', name_ms: 'Sos Pedas', name_ta: 'காரமான சாஸ்', name_zh: '辣酱', price: 1.00 },
+                { id: 'barbeque_sauce', name: 'Barbeque Sauce', name_ms: 'Sos BBQ', name_ta: 'பார்பிக்யூ சாஸ்', name_zh: '烧烤酱', price: 1.00 }
+            ],
+            // MEE REBUS
+            'mee rebus': [
+                { id: 'boiled_egg', name: 'Boiled Egg', name_ms: 'Telur Rebus', name_ta: 'வேகவைத்த முட்டை', name_zh: '水煮蛋', price: 2.00 },
+                { id: 'fried_onion', name: 'Fried Onion', name_ms: 'Bawang Goreng', name_ta: 'வறுத்த வெங்காயம்', name_zh: '炸洋葱', price: 2.00 },
+                { id: 'hot_spicy_sauce', name: 'Hot and Spicy Sauce', name_ms: 'Sos Pedas', name_ta: 'காரமான சாஸ்', name_zh: '辣酱', price: 1.00 },
+                { id: 'barbeque_sauce', name: 'Barbeque Sauce', name_ms: 'Sos BBQ', name_ta: 'பார்பிக்யூ சாஸ்', name_zh: '烧烤酱', price: 1.00 }
+            ],
+            // PRAWN NOODLES
+            'prawn noodles': [
+                { id: 'prawn', name: 'Prawn', name_ms: 'Udang', name_ta: 'இறால்', name_zh: '虾', price: 3.00 },
+                { id: 'sliced_chicken', name: 'Sliced Chicken', name_ms: 'Ayam Potong', name_ta: 'கோழி துண்டு', name_zh: '鸡肉片', price: 3.00 },
+                { id: 'hot_spicy_sauce', name: 'Hot and Spicy Sauce', name_ms: 'Sos Pedas', name_ta: 'காரமான சாஸ்', name_zh: '辣酱', price: 1.00 },
+                { id: 'barbeque_sauce', name: 'Barbeque Sauce', name_ms: 'Sos BBQ', name_ta: 'பார்பிக்யூ சாஸ்', name_zh: '烧烤酱', price: 1.00 }
+            ],
+            // NASI LEMAK BIASA
+            'nasi lemak biasa': [
+                { id: 'sambal', name: 'Sambal', name_ms: 'Sambal', name_ta: 'சம்பல்', name_zh: '参巴', price: 1.00 },
+                { id: 'fried_egg', name: 'Fried Egg', name_ms: 'Telur Goreng', name_ta: 'வறுத்த முட்டை', name_zh: '煎蛋', price: 2.00 },
+                { id: 'hot_spicy_sauce', name: 'Hot and Spicy Sauce', name_ms: 'Sos Pedas', name_ta: 'காரமான சாஸ்', name_zh: '辣酱', price: 1.00 },
+                { id: 'barbeque_sauce', name: 'Barbeque Sauce', name_ms: 'Sos BBQ', name_ta: 'பார்பிக்யூ சாஸ்', name_zh: '烧烤酱', price: 1.00 }
+            ],
+            // NASI LEMAK AYAM SAMBAL
+            'nasi lemak ayam sambal': [
+                { id: 'sambal', name: 'Sambal', name_ms: 'Sambal', name_ta: 'சம்பல்', name_zh: '参巴', price: 1.00 },
+                { id: 'fried_egg', name: 'Fried Egg', name_ms: 'Telur Goreng', name_ta: 'வறுத்த முட்டை', name_zh: '煎蛋', price: 2.00 },
+                { id: 'ayam_sambal', name: 'Ayam Sambal', name_ms: 'Ayam Sambal', name_ta: 'சம்பல் கோழி', name_zh: '参巴鸡', price: 4.00 },
+                { id: 'hot_spicy_sauce', name: 'Hot and Spicy Sauce', name_ms: 'Sos Pedas', name_ta: 'காரமான சாஸ்', name_zh: '辣酱', price: 1.00 },
+                { id: 'barbeque_sauce', name: 'Barbeque Sauce', name_ms: 'Sos BBQ', name_ta: 'பார்பிக்யூ சாஸ்', name_zh: '烧烤酱', price: 1.00 }
+            ],
+            // NASI LEMAK AYAM GORENG
+            'nasi lemak ayam goreng': [
+                { id: 'sambal', name: 'Sambal', name_ms: 'Sambal', name_ta: 'சம்பல்', name_zh: '参巴', price: 1.00 },
+                { id: 'fried_chicken', name: 'Fried Chicken', name_ms: 'Ayam Goreng', name_ta: 'பொரித்த கோழி', name_zh: '炸鸡', price: 4.00 },
+                { id: 'fried_egg', name: 'Fried Egg', name_ms: 'Telur Goreng', name_ta: 'வறுத்த முட்டை', name_zh: '煎蛋', price: 2.00 },
+                { id: 'hot_spicy_sauce', name: 'Hot and Spicy Sauce', name_ms: 'Sos Pedas', name_ta: 'காரமான சாஸ்', name_zh: '辣酱', price: 1.00 },
+                { id: 'barbeque_sauce', name: 'Barbeque Sauce', name_ms: 'Sos BBQ', name_ta: 'பார்பிக்யூ சாஸ்', name_zh: '烧烤酱', price: 1.00 }
+            ],
+            // NASI LEMAK AG (alias for NASI LEMAK AYAM GORENG)
+            'nasi lemak ag': [
+                { id: 'sambal', name: 'Sambal', name_ms: 'Sambal', name_ta: 'சம்பல்', name_zh: '参巴', price: 1.00 },
+                { id: 'fried_chicken', name: 'Fried Chicken', name_ms: 'Ayam Goreng', name_ta: 'பொரித்த கோழி', name_zh: '炸鸡', price: 4.00 },
+                { id: 'fried_egg', name: 'Fried Egg', name_ms: 'Telur Goreng', name_ta: 'வறுத்த முட்டை', name_zh: '煎蛋', price: 2.00 },
+                { id: 'hot_spicy_sauce', name: 'Hot and Spicy Sauce', name_ms: 'Sos Pedas', name_ta: 'காரமான சாஸ்', name_zh: '辣酱', price: 1.00 },
+                { id: 'barbeque_sauce', name: 'Barbeque Sauce', name_ms: 'Sos BBQ', name_ta: 'பார்பிக்யூ சாஸ்', name_zh: '烧烤酱', price: 1.00 }
+            ],
+            // NASI KUNYIT
+            'nasi kunyit': [
+                { id: 'chicken_sambal', name: 'Chicken Sambal', name_ms: 'Ayam Sambal', name_ta: 'சம்பல் கோழி', name_zh: '参巴鸡', price: 4.00 },
+                { id: 'hot_spicy_sauce', name: 'Hot and Spicy Sauce', name_ms: 'Sos Pedas', name_ta: 'காரமான சாஸ்', name_zh: '辣酱', price: 1.00 },
+                { id: 'barbeque_sauce', name: 'Barbeque Sauce', name_ms: 'Sos BBQ', name_ta: 'பார்பிக்யூ சாஸ்', name_zh: '烧烤酱', price: 1.00 }
+            ],
+            // NASI GORENG ALI
+            'nasi goreng ali': [
+                { id: 'fried_egg', name: 'Fried Egg', name_ms: 'Telur Goreng', name_ta: 'வறுத்த முட்டை', name_zh: '煎蛋', price: 2.00 },
+                { id: 'fried_onion', name: 'Fried Onion', name_ms: 'Bawang Goreng', name_ta: 'வறுத்த வெங்காயம்', name_zh: '炸洋葱', price: 1.00 },
+                { id: 'hot_spicy_sauce', name: 'Hot and Spicy Sauce', name_ms: 'Sos Pedas', name_ta: 'காரமான சாஸ்', name_zh: '辣酱', price: 1.00 },
+                { id: 'barbeque_sauce', name: 'Barbeque Sauce', name_ms: 'Sos BBQ', name_ta: 'பார்பிக்யூ சாஸ்', name_zh: '烧烤酱', price: 1.00 }
+            ],
+            // NASI GORENG KAMPUNG
+            'nasi goreng kampung': [
+                { id: 'fried_egg', name: 'Fried Egg', name_ms: 'Telur Goreng', name_ta: 'வறுத்த முட்டை', name_zh: '煎蛋', price: 2.00 },
+                { id: 'fried_onion', name: 'Fried Onion', name_ms: 'Bawang Goreng', name_ta: 'வறுத்த வெங்காயம்', name_zh: '炸洋葱', price: 1.00 },
+                { id: 'hot_spicy_sauce', name: 'Hot and Spicy Sauce', name_ms: 'Sos Pedas', name_ta: 'காரமான சாஸ்', name_zh: '辣酱', price: 1.00 },
+                { id: 'barbeque_sauce', name: 'Barbeque Sauce', name_ms: 'Sos BBQ', name_ta: 'பார்பிக்யூ சாஸ்', name_zh: '烧烤酱', price: 1.00 }
+            ],
+            // NASI GORENG CINA
+            'nasi goreng cina': [
+                { id: 'fried_egg', name: 'Fried Egg', name_ms: 'Telur Goreng', name_ta: 'வறுத்த முட்டை', name_zh: '煎蛋', price: 2.00 },
+                { id: 'fried_onion', name: 'Fried Onion', name_ms: 'Bawang Goreng', name_ta: 'வறுத்த வெங்காயம்', name_zh: '炸洋葱', price: 1.00 },
+                { id: 'hot_spicy_sauce', name: 'Hot and Spicy Sauce', name_ms: 'Sos Pedas', name_ta: 'காரமான சாஸ்', name_zh: '辣酱', price: 1.00 },
+                { id: 'barbeque_sauce', name: 'Barbeque Sauce', name_ms: 'Sos BBQ', name_ta: 'பார்பிக்யூ சாஸ்', name_zh: '烧烤酱', price: 1.00 }
+            ],
+            // HAINANESE CHICKEN RICE
+            'hainanese chicken rice': [
+                { id: 'hainanese_rice', name: 'Hainanese Rice', name_ms: 'Nasi Hainan', name_ta: 'ஹைனானீஸ் சாதம்', name_zh: '海南饭', price: 3.00 },
+                { id: 'hainanese_chicken', name: 'Hainanese Chicken', name_ms: 'Ayam Hainan', name_ta: 'ஹைனானீஸ் கோழி', name_zh: '海南鸡', price: 5.00 },
+                { id: 'hot_spicy_sauce', name: 'Hot and Spicy Sauce', name_ms: 'Sos Pedas', name_ta: 'காரமான சாஸ்', name_zh: '辣酱', price: 1.00 },
+                { id: 'barbeque_sauce', name: 'Barbeque Sauce', name_ms: 'Sos BBQ', name_ta: 'பார்பிக்யூ சாஸ்', name_zh: '烧烤酱', price: 1.00 }
+            ],
+            // HAINANESE CHICKEN CHOP
+            'hainanese chicken chop': [
+                { id: 'french_fries', name: 'French Fries', name_ms: 'Kentang Goreng', name_ta: 'பிரெஞ்சு பொரியல்', name_zh: '薯条', price: 4.00 },
+                { id: 'chicken_chop', name: 'Chicken Chop', name_ms: 'Ayam Chop', name_ta: 'சிக்கன் சாப்', name_zh: '鸡扒', price: 7.00 },
+                { id: 'hot_spicy_sauce', name: 'Hot and Spicy Sauce', name_ms: 'Sos Pedas', name_ta: 'காரமான சாஸ்', name_zh: '辣酱', price: 1.00 },
+                { id: 'barbeque_sauce', name: 'Barbeque Sauce', name_ms: 'Sos BBQ', name_ta: 'பார்பிக்யூ சாஸ்', name_zh: '烧烤酱', price: 1.00 }
+            ],
+            // CHICKEN PORRIDGE
+            'chicken porridge': [
+                { id: 'minced_chicken', name: 'Minced Chicken', name_ms: 'Ayam Cincang', name_ta: 'கோழி துண்டு', name_zh: '鸡肉碎', price: 3.00 },
+                { id: 'hot_spicy_sauce', name: 'Hot and Spicy Sauce', name_ms: 'Sos Pedas', name_ta: 'காரமான சாஸ்', name_zh: '辣酱', price: 3.00 },
+                { id: 'barbeque_sauce', name: 'Barbeque Sauce', name_ms: 'Sos BBQ', name_ta: 'பார்பிக்யூ சாஸ்', name_zh: '烧烤酱', price: 1.00 }
+            ]
+        };
+
+        // Drinks customization (ICE - free for all drinks)
+        const drinkCustomization = [
+            { id: 'ice', name: 'Ice', name_ms: 'Ais', name_ta: 'ஐஸ்', name_zh: '冰', price: 0 }
+        ];
+
+        // Items with NO customization options
+        const noCustomizationItems = [
+            'fried chicken', 'sambal chicken', 'rendang chicken', 'chee chong fun',
+            'sambal kerang', 'sambal sotong', 'fried egg'
+        ];
+
+        // Drink keywords to identify drinks (must be whole word match)
+        const drinkKeywords = ['teh', 'kopi', 'milo', 'coffee', 'tea', 'barley', 'cham', 'limau', 'sirap', 'bandung', 'juice', 'air'];
+        
+        // Drinks that end with "ice" (full word, not part of "rice")
+        const drinkEndingsWithIce = [' ice', 'kopi ice', 'teh ice', 'milo ice', 'barley ice', 'cham ice', 'coffee ice'];
+
+        // Normalize item name to handle abbreviations and variations
+        function normalizeItemName(itemName) {
+            if (!itemName) return '';
+            
+            let normalized = itemName.toLowerCase().trim();
+            
+            // Handle common abbreviations and variations (order matters - check longer patterns first)
+            const nameMappings = [
+                ['soto bihun', 'bihun soto'],
+                ['nasi lemak fried chicken', 'nasi lemak ayam goreng'],
+                ['nasi lemak ag', 'nasi lemak ayam goreng'],
+                ['nasi lemak as', 'nasi lemak ayam sambal'],
+                ['nl ag', 'nasi lemak ayam goreng'],
+                ['nl as', 'nasi lemak ayam sambal'],
+                ['nl biasa', 'nasi lemak biasa'],
+                [' ag', ' ayam goreng'],
+                [' as', ' ayam sambal'],
+                ['ah hock ken noodle', 'ah hock ken noodles'],
+                ['ah hock ken', 'ah hock ken noodles'],
+                ['hainanese rice', 'hainanese chicken rice'],
+                ['hainanese chicken', 'hainanese chicken rice'],
+                ['chicken chop', 'hainanese chicken chop'],
+                ['hainanese chop', 'hainanese chicken chop']
+            ];
+            
+            // Apply mappings (check longer patterns first, apply most specific match)
+            for (const [abbrev, fullName] of nameMappings) {
+                if (normalized.includes(abbrev)) {
+                    // Use replace with word boundary for ' ag' and ' as' to avoid partial matches
+                    if (abbrev === ' ag' || abbrev === ' as') {
+                        // Replace ' ag' or ' as' only when followed by space or end of string
+                        normalized = normalized.replace(/\s+ag(\s|$)/gi, ' ayam goreng$1');
+                        normalized = normalized.replace(/\s+as(\s|$)/gi, ' ayam sambal$1');
+                    } else {
+                        normalized = normalized.replace(abbrev, fullName);
+                    }
+                }
+            }
+            
+            return normalized;
+        }
+
+        // Get customizations for current item
+        function getItemCustomizations(itemName) {
+            if (!itemName) return [];
+            
+            const lowerName = itemName.toLowerCase().trim();
+            const normalizedName = normalizeItemName(itemName);
+            
+            console.log('Getting customizations for:', lowerName);
+            console.log('Normalized name:', normalizedName);
+            
+            // Check if item has no customization (skip 'fried chicken' for nasi lemak dishes so "Nasi Lemak Fried Chicken" gets options)
+            for (const noCustomItem of noCustomizationItems) {
+                if (noCustomItem === 'fried chicken' && (lowerName.includes('nasi lemak') || normalizedName.includes('nasi lemak'))) continue;
+                if (lowerName.includes(noCustomItem) || noCustomItem.includes(lowerName) ||
+                    normalizedName.includes(noCustomItem) || noCustomItem.includes(normalizedName)) {
+                    console.log('No customization match:', noCustomItem);
+                    return [];
+                }
+            }
+            
+            // Check for exact or partial match in itemCustomizations (longest match first)
+            let bestMatch = null;
+            let bestMatchLength = 0;
+            
+            // Try matching with both original and normalized name
+            const namesToTry = [lowerName, normalizedName];
+            
+            for (const nameToMatch of namesToTry) {
+                for (const [key, customizations] of Object.entries(itemCustomizations)) {
+                    // Check if key is contained in name or name is contained in key
+                    if (nameToMatch.includes(key) || key.includes(nameToMatch)) {
+                        if (key.length > bestMatchLength) {
+                            bestMatch = customizations;
+                            bestMatchLength = key.length;
+                            console.log('Found match:', key, 'for name:', nameToMatch);
+                        }
+                    }
+                }
+            }
+            
+            if (bestMatch) {
+                console.log('Returning customizations for match');
+                return bestMatch;
+            }
+            
+            // Check if it's a drink (whole word match, not partial like "rice" containing "ice")
+            const isDrink = drinkKeywords.some(keyword => {
+                // Check for whole word match using word boundaries
+                const regex = new RegExp('\\b' + keyword + '\\b', 'i');
+                return regex.test(lowerName) || regex.test(normalizedName);
+            }) || drinkEndingsWithIce.some(ending => {
+                const endingTrimmed = ending.trim();
+                return lowerName.endsWith(endingTrimmed) || lowerName.includes(ending) ||
+                       normalizedName.endsWith(endingTrimmed) || normalizedName.includes(ending);
+            });
+            
+            if (isDrink) {
+                console.log('Detected as drink');
+                return drinkCustomization;
+            }
+            
+            console.log('No customizations found, returning empty');
+            // Return empty array for items not in the list
+            return [];
+        }
+
+        // Current active customizations for the item
+        let activeCustomizations = [];
+
+        // Load item data
+        function loadItemData() {
+            // Try to get from localStorage first
+            const customizeData = localStorage.getItem('customize_item');
+            
+            if (customizeData) {
+                currentItem = JSON.parse(customizeData);
+                
+                // Check if we're editing an existing cart item
+                if (currentItem.cartIndex !== undefined && currentItem.cartIndex >= 0) {
+                    isEditingCartItem = true;
+                    editingCartIndex = currentItem.cartIndex;
+                    console.log('Editing existing cart item at index:', editingCartIndex);
+                    
+                    // Load existing customizations from cart item
+                    if (currentItem.customizations && Array.isArray(currentItem.customizations)) {
+                        currentItem.customizations.forEach(custom => {
+                            if (custom.id && custom.quantity) {
+                                customizationQuantities[custom.id] = custom.quantity;
+                                console.log('Loaded customization:', custom.id, '= qty', custom.quantity);
+                            }
+                        });
+                    }
+                }
+            } else {
+                // Fallback to default
+                currentItem = {
+                    name: 'Sample Item',
+                    price: 10.00,
+                    image: 'placeholder.png'
+                };
+            }
+
+            // Display item - show base name without customizations
+            let displayName = currentItem.name;
+            if (isEditingCartItem) {
+                // Remove customization text in parentheses for display
+                displayName = displayName.replace(/\s*\([^)]*\)\s*$/, '').trim();
+            }
+            document.getElementById('itemName').textContent = displayName;
+            document.getElementById('itemImage').src = currentItem.image || 'placeholder.png';
+            
+            // Use basePrice if available (when editing), otherwise use price (when adding new)
+            if (currentItem.basePrice !== undefined) {
+                basePrice = parseFloat(currentItem.basePrice);
+                console.log('Using stored base price:', basePrice);
+            } else {
+                basePrice = parseFloat(currentItem.price) || 0;
+                console.log('Using price as base price:', basePrice);
+            }
+            
+            updatePrice();
+
+            // Load customizations
+            renderCustomizations();
+            
+            // Update badge with any existing customizations
+            updateNotificationBadge();
+        }
+
+        // Render customization options
+        function renderCustomizations() {
+            const container = document.getElementById('customizationOptions');
+            const currentLang = localStorage.getItem('kioskLanguage') || 'en';
+            
+            // Get base item name for matching
+            let itemName = currentItem ? currentItem.name : '';
+            if (isEditingCartItem) {
+                itemName = itemName.replace(/\s*\([^)]*\)\s*$/, '').trim();
+            }
+            
+            // Get item-specific customizations
+            activeCustomizations = getItemCustomizations(itemName);
+            
+            // If no customizations available, show message
+            if (activeCustomizations.length === 0) {
+                container.innerHTML = `
+                    <div class="customization-option" style="justify-content: center; padding: 20px;">
+                        <div class="option-label" style="text-align: center; color: #666;">
+                            ${currentLang === 'ms' ? 'Tiada pilihan penyesuaian untuk item ini' : 
+                              currentLang === 'ta' ? 'இந்த உருப்படிக்கு தனிப்பயனாக்க விருப்பங்கள் இல்லை' :
+                              currentLang === 'zh' ? '此商品没有自定义选项' :
+                              'No customization options available for this item'}
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Initialize quantities to 0
+            activeCustomizations.forEach(option => {
+                if (customizationQuantities[option.id] === undefined) {
+                    customizationQuantities[option.id] = 0;
+                }
+            });
+            
+            container.innerHTML = activeCustomizations.map(option => {
+                let optionName = option.name;
+                
+                // Get translated name
+                if (currentLang === 'ms') optionName = option.name_ms;
+                else if (currentLang === 'ta') optionName = option.name_ta;
+                else if (currentLang === 'zh') optionName = option.name_zh;
+                
+                const priceText = option.price > 0 ? `+RM ${option.price.toFixed(2)}` : t('free');
+                const qty = customizationQuantities[option.id] || 0;
+                var leftBtn = '−';
+                var rightBtn = '+';
+                var iceClass = '';
+                if (option.id === 'ice') { leftBtn = 'Less'; rightBtn = 'More'; iceClass = ' option-qty-btn-ice'; }
+                return `
+                    <div class="customization-option">
+                        <div class="option-label">${optionName}</div>
+                        <div class="option-price">${priceText}</div>
+                        <div class="option-quantity-controls">
+                            <button class="option-qty-btn${iceClass}" onclick="decreaseOptionQty('${option.id}')">${leftBtn}</button>
+                            <div class="option-qty-display" id="qty_${option.id}">${qty}</div>
+                            <button class="option-qty-btn${iceClass}" onclick="increaseOptionQty('${option.id}')">${rightBtn}</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Update notification badge
+        function updateNotificationBadge() {
+            const badge = document.getElementById('notificationBadge');
+            const content = document.getElementById('notificationContent');
+            const currentLang = localStorage.getItem('kioskLanguage') || 'en';
+            
+            // Collect all selected add-ons
+            let selectedAddons = [];
+            activeCustomizations.forEach(option => {
+                const qty = customizationQuantities[option.id] || 0;
+                if (qty > 0) {
+                    let optionName = option.name;
+                    
+                    // Get translated name
+                    if (currentLang === 'ms') optionName = option.name_ms;
+                    else if (currentLang === 'ta') optionName = option.name_ta;
+                    else if (currentLang === 'zh') optionName = option.name_zh;
+                    
+                    selectedAddons.push(qty > 1 ? `${optionName} x${qty}` : optionName);
+                }
+            });
+            
+            // Show or hide badge
+            if (selectedAddons.length > 0) {
+                content.textContent = selectedAddons.join(', ');
+                badge.classList.add('show');
+            } else {
+                badge.classList.remove('show');
+            }
+        }
+
+        // Increase option quantity
+        function increaseOptionQty(optionId) {
+            customizationQuantities[optionId]++;
+            document.getElementById('qty_' + optionId).textContent = customizationQuantities[optionId];
+            updatePrice();
+            updateNotificationBadge();
+            console.log(`${optionId} quantity increased to:`, customizationQuantities[optionId]);
+        }
+
+        // Decrease option quantity
+        function decreaseOptionQty(optionId) {
+            if (customizationQuantities[optionId] > 0) {
+                customizationQuantities[optionId]--;
+                document.getElementById('qty_' + optionId).textContent = customizationQuantities[optionId];
+                updatePrice();
+                updateNotificationBadge();
+                console.log(`${optionId} quantity decreased to:`, customizationQuantities[optionId]);
+            }
+        }
+
+        // Update total price
+        function updatePrice() {
+            let customizationTotal = 0;
+            
+            // Calculate total from all options with quantities
+            activeCustomizations.forEach(option => {
+                const qty = customizationQuantities[option.id] || 0;
+                customizationTotal += option.price * qty;
+            });
+            
+            const totalPrice = basePrice + customizationTotal;
+            document.getElementById('itemPrice').textContent = `RM ${totalPrice.toFixed(2)}`;
+            console.log('Price updated. Base:', basePrice, 'Customizations:', customizationTotal, 'Total:', totalPrice);
+        }
+
+        // Save customization and add to cart
+        function saveCustomization() {
+            if (!currentItem) {
+                alert(t('errorNoItemData'));
+                return;
+            }
+
+            // Calculate total customization price
+            let customizationTotal = 0;
+            let customizationsList = [];
+            
+            activeCustomizations.forEach(option => {
+                const qty = customizationQuantities[option.id] || 0;
+                if (qty > 0) {
+                    customizationTotal += option.price * qty;
+                    customizationsList.push({
+                        id: option.id,
+                        name: option.name,
+                        price: option.price,
+                        quantity: qty
+                    });
+                }
+            });
+
+            // Calculate final price
+            const totalPrice = basePrice + customizationTotal;
+
+            console.log('=== SAVING TO CART ===');
+            console.log('Base Price:', basePrice);
+            console.log('Customization Total:', customizationTotal);
+            console.log('Final Price (Base + Customizations):', totalPrice);
+
+            // Load cart
+            let cartItems = [];
+            const savedCart = localStorage.getItem('amakiosk_cart');
+            if (savedCart) {
+                cartItems = JSON.parse(savedCart);
+            }
+
+            // Get base item name (remove existing customization text if editing)
+            let baseItemName = currentItem.name;
+            if (isEditingCartItem) {
+                // Remove customization text in parentheses
+                baseItemName = baseItemName.replace(/\s*\([^)]*\)\s*$/, '').trim();
+            }
+
+            // Create customized item name
+            let customizedName = baseItemName;
+            if (customizationsList.length > 0) {
+                const customText = customizationsList.map(c => 
+                    `${c.name}${c.quantity > 1 ? ' x' + c.quantity : ''}`
+                ).join(', ');
+                customizedName = `${baseItemName} (${customText})`;
+            }
+
+            // Preserve quantity if editing existing item
+            let itemQuantity = 1;
+            if (isEditingCartItem && editingCartIndex >= 0 && editingCartIndex < cartItems.length) {
+                itemQuantity = cartItems[editingCartIndex].quantity || 1;
+                console.log('Preserving existing quantity:', itemQuantity);
+            }
+
+            const updatedCartItem = {
+                name: customizedName,
+                price: totalPrice,
+                basePrice: basePrice, // Store base price for future edits
+                image: currentItem.image,
+                quantity: itemQuantity, // Preserve quantity when editing
+                customizations: customizationsList
+            };
+
+            // Update existing item or add new item
+            if (isEditingCartItem && editingCartIndex >= 0 && editingCartIndex < cartItems.length) {
+                // UPDATE existing item
+                cartItems[editingCartIndex] = updatedCartItem;
+                console.log('✅ Updated existing cart item at index:', editingCartIndex);
+                console.log('✅ Updated item:', updatedCartItem);
+            } else {
+                // ADD new item
+                cartItems.push(updatedCartItem);
+                console.log('✅ Added new item to cart:', updatedCartItem);
+            }
+
+            // Save cart
+            localStorage.setItem('amakiosk_cart', JSON.stringify(cartItems));
+            console.log('✅ Cart saved. Total items:', cartItems.length);
+            console.log('✅ Item price: RM ' + totalPrice.toFixed(2));
+
+            // Clear customize data
+            localStorage.removeItem('customize_item');
+
+            // If editing, go back to cart; if adding new, go to menu with success notification
+            if (isEditingCartItem) {
+                console.log('Returning to cart page (was editing)');
+                window.location.href = 'cart-page.html';
+            } else {
+                // Set flag to show success notification on menu page
+                localStorage.setItem('show_add_success', 'true');
+                localStorage.setItem('added_item_name', customizedName);
+                console.log('Returning to menu page (was adding new) - will show success notification');
+                window.location.href = 'new-menu-sample.html';
+            }
+        }
+
+        // Go back to previous page
+        function goBack() {
+            localStorage.removeItem('customize_item');
+            
+            // If we were editing, go back to cart; otherwise go to menu
+            if (isEditingCartItem) {
+                window.location.href = 'cart-page.html';
+            } else {
+                window.location.href = 'new-menu-sample.html';
+            }
+        }
+
+        // Initialize on page load
+        // Update customize title based on language
+        function updateCustomizeTitle() {
+            const currentLang = localStorage.getItem('kioskLanguage') || 'en';
+            const customizeTitle = document.getElementById('customizeTitle');
+            
+            try {
+                // English & Malay: Use IMAGE fonts
+                if (currentLang === 'en' || currentLang === 'ms') {
+                    const imageSrc = (currentLang === 'ms') ? 'ubahsuaifont.png' : 'custfont.png';
+                    
+                    const img = document.createElement('img');
+                    img.src = imageSrc;
+                    img.alt = 'Customize';
+                    img.style.cssText = 'height: 35px; width: auto; object-fit: contain; display: block;';
+                    
+                    img.onerror = function() {
+                        console.error('Failed to load customize title image:', imageSrc);
+                        customizeTitle.textContent = t('customize');
+                        customizeTitle.style.color = '#ffffff';
+                        customizeTitle.style.fontSize = '24px';
+                        customizeTitle.style.fontWeight = 'bold';
+                        customizeTitle.style.textShadow = '2px 2px 4px rgba(0,0,0,0.5)';
+                    };
+                    
+                    customizeTitle.innerHTML = '';
+                    customizeTitle.appendChild(img);
+                } 
+                // Tamil & Chinese: Use TEXT translations
+                else {
+                    customizeTitle.textContent = t('customize');
+                    customizeTitle.style.color = '#ffffff';
+                    customizeTitle.style.fontSize = '24px';
+                    customizeTitle.style.fontWeight = 'bold';
+                    customizeTitle.style.textShadow = '2px 2px 4px rgba(0,0,0,0.5)';
+                }
+            } catch (error) {
+                console.error('Error updating customize title:', error);
+                customizeTitle.textContent = t('customize');
+                customizeTitle.style.color = '#ffffff';
+                customizeTitle.style.fontSize = '24px';
+                customizeTitle.style.fontWeight = 'bold';
+                customizeTitle.style.textShadow = '2px 2px 4px rgba(0,0,0,0.5)';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadItemData();
+            
+            // Update translations
+            if (typeof updatePageTranslations === 'function') {
+                updatePageTranslations();
+            }
+            
+            // Update customize title based on language
+            updateCustomizeTitle();
+        });
+    </script>
+</body>
+</html>

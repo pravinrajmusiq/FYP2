@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#bf8a47">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="AMAK Kiosk">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="AMAK Kiosk">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- PWA Icons -->
+    <link rel="icon" type="image/png" sizes="192x192" href="icon.png">
+    <link rel="apple-touch-icon" href="icon.png">
+    
+    <title>Payment Success - Ali, Muthu & Ah Hock</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background-color: #efebce;
+        }
+
+        /* Header Section - EXACT Wireframe Match */
+        .header-section {
+            background-color: #bf8a47;
+            width: 100%;
+            height: 12vh;
+            display: flex;
+            align-items: center;
+            padding: 15px 40px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        /* Payment Success Container */
+        .payment-success-container {
+            display: none; /* Hidden - title container removed */
+        }
+
+        .logo-container {
+            display: none; /* Hidden - logo removed */
+        }
+
+        .logo {
+            display: none;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 45px;
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .header-title img {
+            height: 42px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        /* Main Content - Samsung Tab A8 Optimized */
+        .main-content {
+            flex: 1;
+            width: 100%;
+            padding: 25px 40px;
+            overflow: hidden;
+            background-color: #efebce;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+            gap: 25px;
+        }
+
+        /* Thank You Message - Samsung Tab A8 Optimized */
+        .thank-you-message {
+            text-align: center;
+            color: #362315;
+            font-size: 28px;
+            font-weight: bold;
+            line-height: 1.4;
+        }
+
+        /* Order Card - Samsung Tab A8 Optimized */
+        .order-card {
+            background-color: #362315;
+            border-radius: 20px;
+            padding: 30px 40px;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            max-width: 450px;
+            width: 100%;
+        }
+
+        .order-label {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .order-number {
+            color: white;
+            font-size: 64px;
+            font-weight: bold;
+            line-height: 1;
+            margin-bottom: 20px;
+        }
+
+        .order-number-small {
+            font-size: 28px;
+            vertical-align: super;
+            margin-right: 8px;
+        }
+
+        .order-instructions {
+            color: white;
+            font-size: 16px;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        /* Footer Message - Samsung Tab A8 Optimized */
+        .footer-message {
+            text-align: center;
+            color: #bf8a47;
+            font-size: 24px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Auto Redirect Timer */
+        .redirect-timer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #bf8a47;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: bold;
+            z-index: 1000;
+            display: none; /* Hidden - timer removed */
+        }
+
+        /* Samsung A8 Tablet Portrait Mode - 1200x1920 */
+        @media (max-width: 1200px) and (min-height: 1900px) and (orientation: portrait) {
+            body {
+                height: 100vh;
+                overflow: hidden;
+            }
+
+            .header-section {
+                height: 10vh;
+                padding: 12px 30px;
+            }
+
+            .main-content {
+                padding: 30px 40px;
+                gap: 30px;
+            }
+
+            .thank-you-message {
+                font-size: 24px;
+                line-height: 1.5;
+            }
+
+            .order-card {
+                padding: 35px 45px;
+                max-width: 500px;
+            }
+
+            .order-label {
+                font-size: 20px;
+                margin-bottom: 16px;
+            }
+
+            .order-number {
+                font-size: 100px;
+                margin: 20px 0;
+            }
+
+            .order-number-small {
+                font-size: 35px;
+            }
+
+            .order-instructions {
+                font-size: 18px;
+                line-height: 1.6;
+            }
+
+            .footer-message {
+                font-size: 22px;
+            }
+
+            .redirect-timer {
+                font-size: 16px;
+                padding: 14px 28px;
+            }
+        }
+
+        /* Samsung A8 Tablet Landscape Mode - 1920x1200 */
+        @media (min-width: 1200px) and (max-width: 1920px) and (min-height: 800px) and (orientation: landscape) {
+            body {
+                height: 100vh;
+                overflow: hidden;
+            }
+
+            .header-section {
+                height: 12vh;
+                padding: 15px 40px;
+            }
+
+            .payment-success-container {
+                border-radius: 18px;
+                padding: 15px 85px;
+                min-width: 280px;
+            }
+
+            .header-title {
+                min-height: 35px;
+            }
+
+            .header-title img {
+                height: 35px;
+            }
+
+            .main-content {
+                padding: 40px 60px;
+                gap: 40px;
+            }
+
+            .thank-you-message {
+                font-size: 32px;
+                line-height: 1.6;
+            }
+
+            .order-card {
+                padding: 50px 60px;
+                max-width: 700px;
+            }
+
+            .order-label {
+                font-size: 26px;
+                margin-bottom: 20px;
+            }
+
+            .order-number {
+                font-size: 140px;
+                margin: 25px 0;
+            }
+
+            .order-number-small {
+                font-size: 45px;
+            }
+
+            .order-instructions {
+                font-size: 24px;
+                line-height: 1.8;
+            }
+
+            .footer-message {
+                font-size: 24px;
+            }
+
+            .redirect-timer {
+                font-size: 20px;
+                padding: 18px 35px;
+            }
+        }
+
+        /* Responsive Design for Samsung Tab A8 */
+        @media (max-width: 1024px) {
+            .payment-success-container {
+                border-radius: 22px;
+                padding: 20px 100px;
+                min-width: 280px;
+            }
+
+            .header-title {
+                min-height: 42px;
+            }
+
+            .header-title img {
+                height: 42px;
+            }
+            
+            .thank-you-message {
+                font-size: 28px;
+            }
+            
+            .order-card {
+                padding: 30px 40px;
+                max-width: 400px;
+            }
+            
+            .order-number {
+                font-size: 64px;
+            }
+            
+            .footer-message {
+                font-size: 24px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 30px 30px;
+                gap: 30px;
+            }
+
+            .payment-success-container {
+                border-radius: 18px;
+                padding: 18px 60px;
+                min-width: 200px;
+            }
+            
+            .header-title {
+                min-height: 32px;
+            }
+
+            .header-title img {
+                height: 32px;
+            }
+            
+            .thank-you-message {
+                font-size: 24px;
+            }
+            
+            .order-card {
+                padding: 25px 30px;
+                max-width: 350px;
+            }
+            
+            .order-number {
+                font-size: 56px;
+            }
+            
+            .footer-message {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with Logo and Title -->
+    <div class="header-section">
+        <div class="logo-container">
+            <img src="logo old.png" alt="Ali, Muthu & Ah Hock" class="logo">
+        </div>
+        <div class="payment-success-container">
+            <div class="header-title" data-translate="paymentSuccess">Payment Success</div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Thank You Message -->
+        <div class="thank-you-message">
+            <span data-translate="thankYouOrder">Thank you for your order!</span><br>
+            <span data-translate="paymentProcessed">Your payment has been processed</span>
+        </div>
+
+        <!-- Order Card -->
+        <div class="order-card">
+            <div class="order-label" data-translate="order">Order</div>
+            <div class="order-number">
+                <span class="order-number-small">No</span>100
+            </div>
+            <div class="order-instructions">
+                <span data-translate="preparingOrder">We're preparing your order,</span><br>
+                <span data-translate="takeReceipt">Please take your receipt</span>
+            </div>
+        </div>
+
+        <!-- Footer Message -->
+        <div class="footer-message" data-translate="orderComplete">Order Complete</div>
+    
+    </div>
+
+    <!-- Redirect Timer -->
+    <div class="redirect-timer" id="redirectTimer">
+        <span data-translate="returningToStart">Returning to start in</span> <span id="countdown">5</span>s
+    </div>
+
+    <!-- Translation System -->
+    <script src="translations.js"></script>
+    
+    <script>
+        let orderNumber = 100;
+        let countdown = 5; // Changed back to 5 seconds as requested
+
+        // Load order number from localStorage
+        function loadOrderNumber() {
+            const savedOrderNumber = localStorage.getItem('lastOrderNumber');
+            if (savedOrderNumber) {
+                orderNumber = savedOrderNumber;
+                document.querySelector('.order-number').innerHTML = 
+                    `<span class="order-number-small">No</span>${orderNumber}`;
+                console.log('Order number loaded:', orderNumber);
+            } else {
+                console.log('No order number found, using default');
+            }
+        }
+
+        // Clear all kiosk data for fresh start
+        function clearKioskData() {
+            localStorage.removeItem('amakiosk_cart');
+            localStorage.removeItem('kioskCartTotal');
+            localStorage.removeItem('lastOrderNumber');
+            localStorage.removeItem('lastPaymentMethod');
+            localStorage.removeItem('customize_item');
+            localStorage.removeItem('show_add_success');
+            localStorage.removeItem('added_item_name');
+            console.log('All kiosk data cleared for fresh start');
+        }
+
+        // Manual continue function
+        function goToStart() {
+            console.log('Manual continue to start clicked');
+            clearKioskData();
+            window.location.href = 'flashpage.html';
+        }
+
+        // Countdown timer - 5 seconds auto redirect
+        function startCountdown() {
+            const countdownElement = document.getElementById('countdown');
+            const timer = setInterval(() => {
+                countdown--;
+                countdownElement.textContent = countdown;
+                
+                if (countdown <= 0) {
+                    clearInterval(timer);
+                    console.log('Countdown finished, redirecting to flashpage...');
+                    
+                    // Clear all data before returning to start
+                    clearKioskData();
+                    
+                    // Redirect to flashpage.html to restart the kiosk flow
+                    window.location.href = 'flashpage.html';
+                }
+            }, 1000);
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('✅ Payment success page loaded');
+            
+            // Initialize translations
+            if (typeof updatePageTranslations === 'function') {
+                updatePageTranslations();
+            }
+            
+            loadOrderNumber();
+            startCountdown();
+        });
+    </script>
+</body>
+</html>

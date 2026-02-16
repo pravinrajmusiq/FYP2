@@ -1,0 +1,1856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#bf8a47">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="AMAK Kiosk">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="AMAK Kiosk">
+    
+    <!-- Android Chrome PWA -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="msapplication-TileColor" content="#bf8a47">
+    <meta name="msapplication-navbutton-color" content="#bf8a47">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- PWA Icons -->
+    <link rel="icon" type="image/png" sizes="192x192" href="icon.png">
+    <link rel="apple-touch-icon" href="icon.png">
+    
+    <title>AMAK Kiosk</title>
+    <script src="translations.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            height: 100dvh;
+            width: 100dvw;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #F5F5DC;
+            height: 100dvh; /* Dynamic viewport height for mobile/tablet */
+            width: 100dvw; /* Dynamic viewport width for mobile/tablet */
+            display: flex;
+            position: fixed; /* Fixed positioning to prevent scrolling issues */
+            overflow-x: hidden;
+            overflow-y: hidden;
+            margin: 0;
+            padding: 0;
+            top: 0;
+            left: 0;
+        }
+
+        /* Background Doodles */
+        .doodle1 {
+            position: absolute;
+            top: 10%;
+            left: 5%;
+            width: 80px;
+            height: 80px;
+            background: url('doodle1.png') no-repeat center;
+            background-size: contain;
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        .doodle2 {
+            position: absolute;
+            top: 20%;
+            right: 8%;
+            width: 100px;
+            height: 100px;
+            background: url('doodle2.png') no-repeat center;
+            background-size: contain;
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        .doodle3 {
+            position: absolute;
+            bottom: 15%;
+            left: 10%;
+            width: 90px;
+            height: 90px;
+            background: url('doodle3.png') no-repeat center;
+            background-size: contain;
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        .doodle4 {
+            position: absolute;
+            bottom: 25%;
+            right: 5%;
+            width: 70px;
+            height: 70px;
+            background: url('doodle4.png') no-repeat center;
+            background-size: contain;
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        .doodle5 {
+            position: absolute;
+            top: 50%;
+            left: 2%;
+            width: 60px;
+            height: 60px;
+            background: url('doodle5.png') no-repeat center;
+            background-size: contain;
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        .doodle6 {
+            position: absolute;
+            top: 60%;
+            right: 2%;
+            width: 85px;
+            height: 85px;
+            background: url('doodle6.png') no-repeat center;
+            background-size: contain;
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        .doodle7 {
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 75px;
+            height: 75px;
+            background: url('doodle7.png') no-repeat center;
+            background-size: contain;
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        /* Header */
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 12vh;
+            background:#bf8a47;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            z-index: 10;
+        }
+
+        .logo {
+            position: absolute;
+            left: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 95px;
+            height: 80px;
+            background: url('logo old.png?v=2') no-repeat center;
+            background-size: contain;
+            border-radius: 8px;
+        }
+
+        .header-title {
+            background: url('wood.png') repeat;
+            background-size: 200px 100px;
+            color: white;
+            padding: 50px 5px;
+            border-radius: 25px;
+            font-size: 24px;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            border: 3px solid #bf8a47;
+            text-align: center;
+            position: absolute;
+            left: calc(17vw + 40px);
+            right: 40px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header-title img {
+            max-height: 50px;
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+        }
+
+        .header-title img[src*="sampinganfont.png"] {
+            max-height: 42px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 12vh;
+            width: 18vw;
+            height: 88vh;
+            background: transparent;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 12px;
+            gap: 12px;
+            z-index: 20;
+        }
+
+        .sidebar-logo {
+            display: none;
+        }
+
+        .menu-title {
+            display: none;
+        }
+
+        .menu-title img {
+            max-height: 50px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            justify-content: flex-start;
+            padding: 20px 12px 20px 12px;
+            height: 100%;
+            gap: 12px;
+        }
+
+        .category-btn {
+            background: #5a3d2a;
+            border: none;
+            color: white;
+            font-size: 22px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            display: flex;
+            flex: 1 1 0;
+            align-items: center;
+            justify-content: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+            min-height: 120px;
+            width: 117%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            margin-bottom: 0;
+            letter-spacing: 1.5px;
+            flex-shrink: 0;
+        }
+
+        .category-btn img {
+            max-height: 28px;
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.6));
+        }
+
+        .category-btn img[src*="sampinganfont.png"] {
+            max-height: 24px;
+        }
+
+        .category-btn:hover {
+            background: #4a3020;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .category-btn.active {
+            background: #362315;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+            transform: none;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 18vw;
+            margin-top: 12vh;
+            padding: 30px;
+            padding-bottom: 180px; /* Extra space for bottom nav + breathing room */
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            position: relative;
+            z-index: 5;
+            height: calc(100vh - 12vh);
+            max-height: calc(100vh - 12vh);
+            background: #F5F5DC;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Custom Scrollbar for better visibility on tablet */
+        .main-content::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        .main-content::-webkit-scrollbar-track {
+            background: rgba(139, 69, 19, 0.1);
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+
+        .main-content::-webkit-scrollbar-thumb {
+            background: #bf8a47;
+            border-radius: 10px;
+            border: 2px solid #F5F5DC;
+        }
+
+        .main-content::-webkit-scrollbar-thumb:hover {
+            background: oklch(67.212% 0.10594 70.667);
+        }
+
+        /* Top scroll confirmation indicator - blue gradient */
+        .main-content::before {
+            content: '';
+            position: fixed;
+            top: 12vh;
+            left: 18vw;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(to bottom, rgba(33, 150, 243, 0.6), transparent);
+            box-shadow: 0 2px 8px rgba(33, 150, 243, 0.4);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 15;
+        }
+
+        /* Bottom scroll confirmation indicator - blue gradient */
+        .main-content::after {
+            content: '';
+            position: fixed;
+            bottom: 10vh;
+            left: 18vw;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(to top, rgba(33, 150, 243, 0.6), transparent);
+            box-shadow: 0 -2px 8px rgba(33, 150, 243, 0.4);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 15;
+        }
+
+        /* Show highlights when at edges */
+        .main-content.at-top::before {
+            opacity: 1;
+        }
+
+        .main-content.at-bottom::after {
+            opacity: 1;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            max-width: 100%;
+            margin: 0 auto 40px auto;
+            padding-bottom: 20px;
+        }
+
+        .menu-item {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .menu-item.hidden {
+            display: none !important;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            border-color: #bf8a47;
+        }
+
+        .menu-item-image {
+            width: 100%;
+            height: 280px;
+            object-fit: contain;
+            background: #f8f8f8;
+            display: block;
+            border-radius: 15px 15px 0 0;
+            margin: 0;
+            order: 1;
+        }
+
+        .menu-item-name {
+            background: white;
+            color: #333;
+            padding: 15px 12px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            text-shadow: none;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.2;
+            border-top: 1px solid #ddd;
+            margin-top: auto;
+            order: 2;
+        }
+
+        .menu-item-price {
+            padding: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            background: #362315;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            border-radius: 0 0 15px 15px;
+            order: 3;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 20.9vw;
+            right: 4vw;
+            height: 10vh;
+            min-height: 80px;
+            background:#efebce;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            z-index: 50;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .nav-btn {
+            background: #362315;
+            border: 2px solid #8B4513;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            min-width: 120px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-btn:hover {
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .cart-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            background: #FDB913 !important;
+            color: #333 !important;
+            min-width: 300px !important;
+            font-weight: bold;
+            text-shadow: none;
+            transition: all 0.3s ease;
+        }
+
+        .cart-btn.shake {
+            animation: cartShake 0.5s ease;
+        }
+
+        @keyframes cartShake {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            10%, 30%, 50%, 70%, 90% {
+                transform: translateX(-5px);
+            }
+            20%, 40%, 60%, 80% {
+                transform: translateX(5px);
+            }
+        }
+
+        /* Cart Badge */
+        .cart-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: linear-gradient(135deg, #ff3333, #cc0000);
+            color: white;
+            border-radius: 50%;
+            min-width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: bold;
+            border: 4px solid white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 100;
+        }
+
+        .cart-badge.show {
+            opacity: 1 !important;
+            transform: scale(1) !important;
+        }
+
+        .cart-badge.pop {
+            animation: badgePop 0.6s ease;
+        }
+
+        @keyframes badgePop {
+            0% {
+                transform: scale(1);
+            }
+            30% {
+                transform: scale(1.4);
+            }
+            50% {
+                transform: scale(0.9);
+            }
+            70% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Cart Notification Popup - Kiosk Style with Theme Color */
+        .cart-notification {
+            position: fixed;
+            top: 15vh;
+            right: 40px;
+            background: linear-gradient(135deg, #FDB913, #ffca28);
+            color: #362315;
+            padding: 25px 40px;
+            border-radius: 20px;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5), 0 0 40px rgba(253, 185, 19, 0.6);
+            font-size: 22px;
+            font-weight: bold;
+            opacity: 0;
+            transform: translateX(600px) scale(0.7);
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 350px;
+            max-width: 450px;
+            border: 5px solid #362315;
+            animation: none;
+            pointer-events: none;
+        }
+
+        .cart-notification.show {
+            opacity: 1 !important;
+            transform: translateX(0) scale(1) !important;
+            animation: pulse 0.5s ease 0.3s;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: translateX(0) scale(1);
+            }
+            50% {
+                transform: translateX(0) scale(1.05);
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(500px) scale(0.8);
+            }
+        }
+
+        .cart-notification.hide {
+            animation: slideOut 0.4s ease forwards;
+        }
+
+        .cart-notification-icon {
+            margin-right: 15px;
+            font-size: 36px;
+            font-weight: bold;
+            animation: checkmark 0.6s ease;
+            filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4));
+        }
+
+        @keyframes checkmark {
+            0% {
+                transform: scale(0) rotate(-45deg);
+            }
+            50% {
+                transform: scale(1.3) rotate(10deg);
+            }
+            100% {
+                transform: scale(1) rotate(0);
+            }
+        }
+
+        .cart-notification.show .cart-notification-icon {
+            animation: checkmark 0.6s ease;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 150px;
+            }
+
+            .header {
+                left: 150px;
+            }
+
+            .main-content {
+                margin-left: 150px;
+            }
+
+            .bottom-nav {
+                left: 150px;
+            }
+
+            .category-btn {
+                font-size: 16px;
+            }
+
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cart-notification {
+                top: 80px;
+                right: 10px;
+                font-size: 13px;
+                padding: 12px 16px;
+                max-width: 200px;
+            }
+
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 120px;
+            }
+
+            .header {
+                left: 120px;
+            }
+
+            .main-content {
+                margin-left: 120px;
+            }
+
+            .bottom-nav {
+                left: 120px;
+            }
+
+            .category-btn {
+                font-size: 14px;
+            }
+
+            .cart-notification {
+                top: 70px;
+                right: 5px;
+                font-size: 12px;
+                padding: 10px 14px;
+                max-width: 180px;
+            }
+
+            .cart-badge {
+                min-width: 20px;
+                height: 20px;
+                font-size: 11px;
+                top: -6px;
+                right: -6px;
+            }
+
+        }
+
+        /* Samsung A8 Tablet Portrait Mode - 1200x1920 */
+        @media (max-width: 1200px) and (min-height: 1900px) and (orientation: portrait) {
+            body {
+                height: 100vh;
+                overflow: hidden;
+            }
+
+            .header-section {
+                height: 8vh;
+                padding: 8px 25px;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: 9vh;
+                padding: 4px 12px 60px 12px;
+                display: flex;
+                flex-direction: row;
+                gap: 8px;
+                overflow-x: auto;
+                box-sizing: border-box;
+            }
+
+            .category-btn {
+                min-width: 120px;
+                padding: 4px 8px;
+                font-size: 14px;
+                height: 42px;
+                line-height: 1.1;
+            }
+
+            .menu-content {
+                flex: 1;
+                padding: 12px 25px;
+                overflow-y: auto;
+            }
+
+            .menu-items-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .menu-item {
+                padding: 12px;
+            }
+
+            .item-image-container {
+                width: 100%;
+                height: 120px;
+            }
+
+            .item-name {
+                font-size: 15px;
+                margin: 8px 0 6px 0;
+            }
+
+            .item-price {
+                font-size: 16px;
+            }
+
+            .add-to-cart-btn {
+                padding: 8px 15px;
+                font-size: 13px;
+                margin-top: 8px;
+            }
+
+            .footer-buttons {
+                padding: 8px 25px 12px 25px;
+            }
+
+            .view-cart-button {
+                padding: 14px 30px;
+                font-size: 17px;
+                flex: 0 0 160px;
+            }
+
+            .back-button-menu {
+                padding: 14px 30px;
+                font-size: 17px;
+                flex: 0 0 140px;
+            }
+        }
+
+        /* Samsung A8 Tablet Landscape Mode - 1920x1200 */
+        @media (min-width: 1200px) and (max-width: 1920px) and (min-height: 800px) and (orientation: landscape) {
+            body {
+                height: 100vh;
+                overflow: hidden;
+            }
+            
+            .sidebar {
+                width: 18vw;
+                padding: 20px 12px;
+                justify-content: flex-start;
+                height: 88vh;
+                box-sizing: border-box;
+                background: transparent;
+                gap: 12px;
+            }
+
+            .sidebar-logo {
+                height: 60px;
+                margin-bottom: 10px;
+                flex-shrink: 0;
+            }
+
+            .sidebar-nav {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: stretch;
+                padding: 20px 12px 20px 12px;
+                height: 100%;
+                gap: 12px;
+            }
+
+            .category-btn {
+                font-size: 24px;
+                border-radius: 8px;
+                flex: 1 1 0;
+                min-height: 120px;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+                font-weight: bold;
+                text-transform: uppercase;
+                letter-spacing: 1.5px;
+                margin-bottom: 0;
+                background: #5a3d2a;
+                border: none;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+                flex-shrink: 0;
+            }
+
+            .category-btn img {
+                max-height: 40px;
+            }
+
+            .category-btn img[src*="sampinganfont.png"] {
+                max-height: 34px;
+            }
+
+            .category-btn:hover {
+                background: #4a3020;
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            }
+
+            .category-btn.active {
+                background: #362315;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+                transform: none;
+            }
+
+            .header {
+                height: 12vh;
+                padding: 0 20px;
+            }
+
+            .logo {
+                width: 120px;
+                height: 95px;
+            }
+
+            .header-title {
+                padding: 20px 20px;
+                font-size: 24px;
+                left: calc(18vw + 40px);
+                right: 40px;
+            }
+
+            .main-content {
+                margin-left: 18vw;
+                margin-top: 12vh;
+                padding: 30px;
+                padding-bottom: 180px;
+                height: calc(100vh - 12vh);
+                max-height: calc(100vh - 12vh);
+                overflow-y: auto;
+                overflow-x: hidden;
+                scroll-behavior: smooth;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            /* Top scroll confirmation indicator (Samsung A8) */
+            .main-content::before {
+                height: 10px;
+            }
+
+            /* Bottom scroll confirmation indicator (Samsung A8) */
+            .main-content::after {
+                height: 10px;
+            }
+
+            /* Cart notification for tablet */
+            .cart-notification {
+                top: 15vh;
+                right: 40px;
+                padding: 22px 35px;
+                font-size: 20px;
+                max-width: 400px; 
+            }
+
+            .cart-notification-icon {
+                font-size: 32px;
+            }
+
+            /* Cart badge for tablet */
+            .cart-badge {
+                min-width: 32px;
+                height: 32px;
+                font-size: 16px;
+                top: -10px;
+                right: -10px;
+            }
+
+            .menu-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 25px;
+                max-width: 100%;
+                margin: 0 auto 40px auto;
+                padding-bottom: 20px;
+            }
+
+            .menu-item {
+                width: 100%;
+            }
+
+            .menu-item-image {
+                height: 280px;
+                width: 100%;
+                object-fit: contain;
+                background: #f8f8f8;
+                border-radius: 15px 15px 0 0;
+                margin: 0;
+                order: 1;
+            }
+
+            .menu-item-name {
+                padding: 15px 12px;
+                font-size: 16px;
+                line-height: 1.2;
+                min-height: 50px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                background: white;
+                color: #333;
+                text-shadow: none;
+                border-top: 1px solid #ddd;
+                order: 2;
+            }
+
+            .menu-item-price {
+                padding: 12px;
+                font-size: 18px;
+                font-weight: bold;
+                background: #362315;
+                color: white;
+                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+                border-radius: 0 0 15px 15px;
+                order: 3;
+            }
+
+            .bottom-nav {
+                left: calc(18vw + 40px);
+                right: 40px;
+                height: 10vh;
+                min-height: 80px;
+                gap: 30px;
+                justify-content: flex-end;
+            }
+
+            .bottom-nav .nav-btn {
+                margin-left: 20px;
+            }
+
+            .bottom-nav .nav-btn:first-child {
+                margin-left: 0;
+            }
+
+            .nav-btn {
+                padding: 15px 30px;
+                font-size: 16px;
+                min-width: 120px;
+                height: 50px;
+            }
+
+            .cart-btn {
+                background: #FDB913 !important;
+                color: #333 !important;
+                min-width: 300px !important;
+                font-weight: bold;
+                text-shadow: none;
+            }
+
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Doodles -->
+    <div class="doodle1"></div>
+    <div class="doodle2"></div>
+    <div class="doodle3"></div>
+    <div class="doodle4"></div>
+    <div class="doodle5"></div>
+    <div class="doodle6"></div>
+    <div class="doodle7"></div>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="logo"></div>
+        <div class="header-title">Menu</div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-logo"></div>
+        <div class="sidebar-nav">
+            <button class="category-btn active" onclick="showCategory('rice', this)" data-translate="rice">RICE</button>
+            <button class="category-btn" onclick="showCategory('noodles', this)" data-translate="noodles">NOODLES</button>
+            <button class="category-btn" onclick="showCategory('sides', this)" data-translate="sides">SIDES</button>
+            <button class="category-btn" onclick="showCategory('drinks', this)" data-translate="drinks">DRINKS</button>
+        </div>
+    </div>
+
+    <!-- Menu Title -->
+    <div class="menu-title" id="menuTitle" data-translate="riceMenu">RICE MENU</div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="menu-grid" id="menuGrid">
+            <!-- Rice Menu Items -->
+
+            <div class="menu-item" data-category="rice">
+                <img src="NASI LEMAK AG.png" alt="Nasi Lemak Ayam Goreng" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Nasi Lemak AG">Nasi Lemak Ayam Goreng</div>
+                <div class="menu-item-price">RM 11.00</div>
+            </div>
+
+            <div class="menu-item" data-category="rice">
+                <img src="NASI LEMAK AYAM SAMBAL.png" alt="Nasi Lemak Ayam Sambal" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Nasi Lemak Ayam Sambal">Nasi Lemak Ayam Sambal</div>
+                <div class="menu-item-price">RM 11.00</div>
+            </div>
+
+            <div class="menu-item" data-category="rice">
+                <img src="NASI LEMAK BIASA.png" alt="Nasi Lemak Biasa" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Nasi Lemak Biasa">Nasi Lemak Biasa</div>
+                <div class="menu-item-price">RM 4.50</div>
+            </div>
+
+            <div class="menu-item" data-category="rice">
+                <img src="HAINANESE CHICKEN RICE.png" alt="Hainanese Chicken Rice" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Hainanese Chicken Rice">Hainanese Chicken Rice</div>
+                <div class="menu-item-price">RM 9.00</div>
+            </div>
+
+            <div class="menu-item" data-category="rice">
+                <img src="NASI GORENG CINA.png" alt="Nasi Goreng Cina" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Nasi Goreng Cina">Nasi Goreng Cina</div>
+                <div class="menu-item-price">RM 9.00</div>
+            </div>
+
+            <div class="menu-item" data-category="rice">
+                <img src="NASI GORENG KAMPUNG.png" alt="Nasi Goreng Kampung" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Nasi Goreng Kampung">Nasi Goreng Kampung</div>
+                <div class="menu-item-price">RM 9.00</div>
+            </div>
+
+            <div class="menu-item" data-category="rice">
+                <img src="NASI KUNYIT.png" alt="Nasi Kunyit" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Nasi Kunyit">Nasi Kunyit</div>
+                <div class="menu-item-price">RM 11.00</div>
+            </div>
+
+
+            <div class="menu-item" data-category="rice">
+                <img src="NASI GORENG ALI.png" alt="Nasi Goreng Ali" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Nasi Goreng Ali">Nasi Goreng Ali</div>
+                <div class="menu-item-price">RM 9.00</div>
+            </div>
+
+            <div class="menu-item" data-category="rice">
+                <img src="CHICKEN PORRIDGE.png" alt="Chicken Porridge" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Chicken Porridge">Chicken Porridge</div>
+                <div class="menu-item-price">RM 9.00</div>
+            </div>
+
+            <div class="menu-item" data-category="rice">
+                <img src="HAINAN CHICKEN CHOP.png" alt="Hainan Chicken Chop" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Hainan Chicken Chop">Hainan Chicken Chop</div>
+                <div class="menu-item-price">RM 15.00</div>
+            </div>
+
+            <!-- Noodles Menu Items -->
+            <div class="menu-item hidden" data-category="noodles">
+                <img src="ASSAM LAKSA.png" alt="Assam Laksa" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Assam Laksa">Assam Laksa</div>
+                <div class="menu-item-price">RM 10.00</div>
+            </div>
+
+            <div class="menu-item hidden" data-category="noodles">
+                <img src="BIHUN GORENG.png" alt="Bihun Goreng" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Bihun Goreng">Bihun Goreng</div>
+                <div class="menu-item-price">RM 8.00</div>
+            </div>
+
+            <div class="menu-item hidden" data-category="noodles">
+                <img src="BIHUN SOTO.png" alt="Bihun Soto" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Bihun Soto">Bihun Soto</div>
+                <div class="menu-item-price">RM 9.00</div>
+            </div>
+
+            <div class="menu-item hidden" data-category="noodles">
+                <img src="CANTONESE NOODLES.png" alt="Cantonese Noodles" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Cantonese Noodles">Cantonese Noodles</div>
+                <div class="menu-item-price">RM 8.50</div>
+            </div>
+
+            <div class="menu-item hidden" data-category="noodles">
+                <img src="KUEY TEOW.png" alt="Kuey Teow" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Kuey Teow">Kuey Teow</div>
+                <div class="menu-item-price">RM 9.00</div>
+            </div>
+
+            <div class="menu-item hidden" data-category="noodles">
+                <img src="MEE GORENG.png" alt="Mee Goreng" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Mee Goreng">Mee Goreng</div>
+                <div class="menu-item-price">RM 8.50</div>
+            </div>
+
+            <div class="menu-item hidden" data-category="noodles">
+                <img src="MEE REBUS.png" alt="Mee Rebus" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Mee Rebus">Mee Rebus</div>
+                <div class="menu-item-price">RM 8.00</div>
+            </div>
+
+            <div class="menu-item hidden" data-category="noodles">
+                <img src="MEE SOTO.png" alt="Mee Soto" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Mee Soto">Mee Soto</div>
+                <div class="menu-item-price">RM 7.50</div>
+            </div>
+
+            <div class="menu-item hidden" data-category="noodles">
+                <img src="PRAWN NOODLE.png" alt="Prawn Noodle" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Prawn Noodle">Prawn Noodle</div>
+                <div class="menu-item-price">RM 10.50</div>
+            </div>
+
+            <!-- Sides Menu Items -->
+            <div class="menu-item hidden" data-category="sides">
+                <img src="TELUR MATA.png" alt="Telur Mata" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Telur Mata">Telur Mata</div>
+                <div class="menu-item-price">RM 2.50</div>
+            </div>
+
+            <div class="menu-item hidden" data-category="sides">
+                <img src="SAMBAL KERANG.png" alt="Sambal Kerang" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Sambal Kerang">Sambal Kerang</div>
+                <div class="menu-item-price">RM 3.00</div>
+            </div>
+
+            <div class="menu-item hidden" data-category="sides">
+                <img src="SAMBAL SOTONG.png" alt="Sambal Sotong" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Sambal Sotong">Sambal Sotong</div>
+                <div class="menu-item-price">RM 4.50</div>
+            </div>
+
+            <div class="menu-item hidden" data-category="sides">
+                <img src="ROTI JALA.png" alt="Roti Jala" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Roti Jala">Roti Jala</div>
+                <div class="menu-item-price">RM 7.00</div>
+            </div>
+
+            <div class="menu-item hidden" data-category="sides">
+                <img src="ROTI BAKAR SET.png" alt="Roti Bakar Set" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Roti Bakar Set">Roti Bakar </div>
+                <div class="menu-item-price">RM 2.50</div>
+            </div>
+
+            <div class="menu-item hidden" data-category="sides">
+                <img src="ROTI BAKAR 2 SET.png" alt="Roti Bakar 2 Set" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Roti Bakar 2 Set">Roti Bakar Set</div>
+                <div class="menu-item-price">RM 5.00</div>
+            </div>
+
+            <div class="menu-item hidden" data-category="sides">
+                <img src="AYAN RENDANG.png" alt="Ayam Rendang" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Ayam Rendang">Ayam Rendang</div>
+                <div class="menu-item-price">RM 7.00</div>
+            </div>
+
+            <div class="menu-item hidden" data-category="sides">
+                <img src="AYAM SAMBAL.png" alt="Ayam Sambal" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Ayam Sambal">Ayam Sambal</div>
+                <div class="menu-item-price">RM 7.00</div>
+            </div>
+
+            <div class="menu-item hidden" data-category="sides">
+                <img src="AYAM GORENG.png" alt="Ayam Goreng" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Ayam Goreng">Ayam Goreng</div>
+                <div class="menu-item-price">RM 7.00</div>
+            </div>
+
+            <div class="menu-item hidden" data-category="noodles">
+                <img src="CHEE CHONG FUN.png" alt="Chee Chong Fun" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Chee Chong Fun">Chee Chong Fun</div>
+                <div class="menu-item-price">RM 4.50</div>
+            </div>
+
+            <!-- Drinks Menu Items -->
+            <div class="menu-item hidden" data-category="drinks">
+                <img src="BARLEY ICE.png" alt="Barley Ice" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Barley Ice">Barley Ice</div>
+                <div class="menu-item-price">RM 3.00</div>
+            </div>
+
+            <div class="menu-item hidden" data-category="drinks">
+                <img src="BARLEY.png" alt="Barley" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Barley">Barley</div>
+                <div class="menu-item-price">RM 3.00</div>
+            </div>
+
+            <div class="menu-item hidden" data-category="drinks">
+                <img src="CHAM ICE.png" alt="Cham Ice" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Cham Ice">Cham Ice</div>
+                <div class="menu-item-price">RM 3.50</div>
+            </div>
+
+            <div class="menu-item hidden" data-category="drinks">
+                <img src="CHAM.png" alt="Cham" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Cham">Cham</div>
+                <div class="menu-item-price">RM 3.00</div>
+            </div>
+
+            <div class="menu-item hidden" data-category="drinks">
+                <img src="COFFEE ICE.png" alt="Coffee Ice" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Coffee Ice">Coffee Ice</div>
+                <div class="menu-item-price">RM 3.50</div>
+            </div>
+
+            <div class="menu-item hidden" data-category="drinks">
+                <img src="COFFEE.png" alt="Coffee" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Coffee">Coffee</div>
+                <div class="menu-item-price">RM 3.00</div>
+            </div>
+
+            <div class="menu-item hidden" data-category="drinks">
+                <img src="ICE LEMON TEA.png" alt="Ice Lemon Tea" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Ice Lemon Tea">Ice Lemon Tea</div>
+                <div class="menu-item-price">RM 3.50</div>
+            </div>
+
+            <div class="menu-item hidden" data-category="drinks">
+                <img src="KOPI O.png" alt="Kopi O" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Kopi O">Kopi O</div>
+                <div class="menu-item-price">RM 3.50</div>
+            </div>
+
+            <div class="menu-item hidden" data-category="drinks">
+                <img src="LEMON TEA.png" alt="Lemon Tea" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Lemon Tea">Lemon Tea</div>
+                <div class="menu-item-price">RM 3.00</div>
+            </div>
+
+            <div class="menu-item hidden" data-category="drinks">
+                <img src="MILO ICE.png" alt="Milo Ice" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Milo Ice">Milo Ice</div>
+                <div class="menu-item-price">RM 4.00</div>
+            </div>
+
+            <div class="menu-item hidden" data-category="drinks">
+                <img src="MILO.png" alt="Milo" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Milo">Milo</div>
+                <div class="menu-item-price">RM 3.50</div>
+            </div>
+
+            <div class="menu-item hidden" data-category="drinks">
+                <img src="NESCAFE ICE.png" alt="Nescafe Ice" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Nescafe Ice">Nescafe Ice</div>
+                <div class="menu-item-price">RM 4.00</div>
+            </div>
+
+            <div class="menu-item hidden" data-category="drinks">
+                <img src="NESCAFE.png" alt="Nescafe" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Nescafe">Nescafe</div>
+                <div class="menu-item-price">RM 3.50</div>
+            </div>
+
+            <div class="menu-item hidden" data-category="drinks">
+                <img src="SIRAP ICE.png" alt="Sirap Ice" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Sirap Ice">Sirap Ice</div>
+                <div class="menu-item-price">RM 3.50</div>
+            </div>
+
+            <div class="menu-item hidden" data-category="drinks">
+                <img src="TEH ICE.png" alt="Teh Ice" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Teh Ice">Teh Ice</div>
+                <div class="menu-item-price">RM 3.50</div>
+            </div>
+
+            <div class="menu-item hidden" data-category="drinks">
+                <img src="TEH O.png" alt="Teh O" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Teh O">Teh O</div>
+                <div class="menu-item-price">RM 2.50</div>
+            </div>
+
+            <div class="menu-item hidden" data-category="drinks">
+                <img src="TEH TARIK.png" alt="Teh Tarik" class="menu-item-image">
+                <div class="menu-item-name" data-translate="Teh Tarik">Teh Tarik</div>
+                <div class="menu-item-price">RM 3.00</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Notification - GOLDEN POPUP -->
+    <div class="cart-notification" id="cartNotification">
+        <span class="cart-notification-icon">✓</span>
+        <span id="notificationText" style="font-size: 22px; font-weight: 900;">Item added to cart!</span>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <button class="nav-btn" onclick="goBack()" data-translate="back">← BACK</button>
+        <button class="nav-btn cart-btn" onclick="viewCart()">
+            <span>🛒</span>
+            <span id="cartText">CART (0)</span>
+            <span class="cart-badge" id="cartBadge">0</span>
+        </button>
+    </div>
+
+    <script>
+        let cartCount = 0;
+
+        function showCategory(category, buttonElement) {
+            console.log('Showing category:', category);
+            
+            // Update active button
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            if (buttonElement) {
+                buttonElement.classList.add('active');
+            }
+
+            // Update menu title with translation or image
+            const menuTitle = document.getElementById('menuTitle');
+            const menuTitleKey = category + 'Menu';
+            menuTitle.setAttribute('data-translate', menuTitleKey);
+            
+            // For drinks category, show image instead of text
+            if (category === 'drinks') {
+                menuTitle.innerHTML = '<img src="drinkfont.png" alt="Drinks Menu">';
+            } else {
+                menuTitle.textContent = t(menuTitleKey);
+            }
+
+            // Update header title (the "MENU" text in the brown bar)
+            const headerTitle = document.querySelector('.header-title');
+            const currentLang = localStorage.getItem('kioskLanguage') || 'en';
+            
+            if (currentLang === 'en') {
+                // Show images only for English
+                if (category === 'drinks') {
+                    headerTitle.innerHTML = '<img src="drinkfont.png" alt="Drinks">';
+                } else if (category === 'noodles') {
+                    headerTitle.innerHTML = '<img src="noodfont.png" alt="Noodles">';
+                } else if (category === 'sides') {
+                    headerTitle.innerHTML = '<img src="sidefont.png" alt="Sides">';
+                } else if (category === 'rice') {
+                    headerTitle.innerHTML = '<img src="ricefont.png" alt="Rice">';
+                } else {
+                    headerTitle.textContent = 'Menu';
+                }
+            } else if (currentLang === 'ms') {
+                // Show images for Malay
+                if (category === 'drinks') {
+                    headerTitle.innerHTML = '<img src="minumanfont.png" alt="Drinks">';
+                } else if (category === 'noodles') {
+                    headerTitle.innerHTML = '<img src="mmfont.png" alt="Noodles">';
+                } else if (category === 'sides') {
+                    headerTitle.innerHTML = '<img src="sampinganfont.png" alt="Sides">';
+                } else if (category === 'rice') {
+                    headerTitle.innerHTML = '<img src="nasifont.png" alt="Rice">';
+                } else {
+                    headerTitle.textContent = 'Menu';
+                }
+            } else {
+                // Show translated text for other languages
+                headerTitle.textContent = t(menuTitleKey);
+            }
+
+            // Show/hide menu items
+            let visibleCount = 0;
+            document.querySelectorAll('.menu-item').forEach(item => {
+                if (item.dataset.category === category) {
+                    item.classList.remove('hidden');
+                    item.style.display = ''; // Clear any inline style
+                    visibleCount++;
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+
+            console.log(`Displayed ${visibleCount} items for category: ${category}`);
+
+            // Reset scroll position to top
+            const mainContent = document.querySelector('.main-content');
+            if (mainContent) {
+                mainContent.scrollTop = 0;
+                // Reset scroll state so confirmation indicators don't appear immediately
+                hasScrolled = false;
+                mainContent.classList.remove('at-top', 'at-bottom');
+                console.log('Category changed, reset scroll state');
+            }
+        }
+
+        function goBack() {
+            window.location.href = 'language-page-sample.html';
+        }
+
+        function viewCart() {
+            window.location.href = 'cart-page.html';
+        }
+
+        // Cart notification functions - Kiosk Style
+        function showCartNotification(itemName) {
+            const notification = document.getElementById('cartNotification');
+            const notificationText = document.getElementById('notificationText');
+            
+            console.log('🔔🔔🔔 SHOWING NOTIFICATION for:', itemName);
+            console.log('Notification element:', notification);
+            console.log('Text element:', notificationText);
+            
+            // Remove any existing classes
+            notification.classList.remove('show', 'hide');
+            
+            // Force reflow to restart animation
+            void notification.offsetWidth;
+            
+            // Set text with success icon - BOLD AND CLEAR
+            notificationText.textContent = `✓ ${itemName} added to cart!`;
+            
+            // Show with animation
+            setTimeout(() => {
+                notification.classList.add('show');
+                console.log('✅✅✅ Notification CLASS ADDED - should be visible now!');
+                console.log('Notification classes:', notification.className);
+            }, 50);
+            
+            // Hide notification after 4 seconds with animation
+            setTimeout(() => {
+                notification.classList.remove('show');
+                notification.classList.add('hide');
+                console.log('👋 Notification hiding');
+            }, 4000);
+        }
+
+        function updateCartBadge() {
+            console.log('🔴🔴🔴 UPDATE CART BADGE - Cart Count:', cartCount);
+            const cartBadge = document.getElementById('cartBadge');
+            
+            console.log('Cart badge element:', cartBadge);
+            
+            if (!cartBadge) {
+                console.error('❌ ERROR: cartBadge element not found!');
+                return;
+            }
+            
+            if (cartCount > 0) {
+                cartBadge.textContent = cartCount;
+                console.log('✅ Badge text set to:', cartCount);
+                
+                // Add show class if not already shown
+                if (!cartBadge.classList.contains('show')) {
+                    cartBadge.classList.add('show');
+                    console.log('✅ Badge show class added');
+                }
+                
+                // Remove pop animation if it exists
+                cartBadge.classList.remove('pop');
+                
+                // Trigger pop animation
+                setTimeout(() => {
+                    cartBadge.classList.add('pop');
+                    console.log('💥 Badge pop animation triggered');
+                }, 10);
+                
+                // Remove pop class after animation
+                setTimeout(() => {
+                    cartBadge.classList.remove('pop');
+                }, 600);
+            } else {
+                cartBadge.classList.remove('show', 'pop');
+                console.log('Cart is empty, hiding badge');
+            }
+        }
+
+        function updateCartDisplay() {
+            console.log('📊📊📊 UPDATE CART DISPLAY - Cart Count:', cartCount);
+            const cartWord = t('cart');
+            const cartTextElement = document.getElementById('cartText');
+            
+            console.log('Cart text element:', cartTextElement);
+            
+            if (cartTextElement) {
+                cartTextElement.textContent = `${cartWord} (${cartCount})`;
+                console.log('✅ Cart button text updated to:', `${cartWord} (${cartCount})`);
+            } else {
+                console.error('❌ ERROR: cartText element not found!');
+            }
+            
+            console.log('🔴 Updating cart badge...');
+            updateCartBadge();
+            
+            // Shake cart button to draw attention
+            const cartBtn = document.querySelector('.cart-btn');
+            if (cartBtn) {
+                console.log('📳 Shaking cart button...');
+                cartBtn.classList.remove('shake');
+                setTimeout(() => {
+                    cartBtn.classList.add('shake');
+                }, 10);
+                setTimeout(() => {
+                    cartBtn.classList.remove('shake');
+                }, 500);
+            } else {
+                console.error('❌ ERROR: Cart button not found!');
+            }
+        }
+
+        // Cart management functions
+        function addToCart(itemName, itemPrice, itemImage = '') {
+            console.log('');
+            console.log('========================================');
+            console.log('🛒🛒🛒 ADD TO CART CALLED:', itemName);
+            console.log('========================================');
+            
+            // Load existing cart
+            let cartItems = [];
+            const savedCart = localStorage.getItem('amakiosk_cart');
+            if (savedCart) {
+                cartItems = JSON.parse(savedCart);
+            }
+            
+            console.log('📦 Cart before adding:', cartItems.length, 'items');
+
+            // Check if item already exists in cart
+            const existingItem = cartItems.find(item => item.name === itemName);
+            if (existingItem) {
+                existingItem.quantity += 1;
+                console.log('➕ Existing item - quantity now:', existingItem.quantity);
+            } else {
+                const newItem = {
+                    name: itemName,
+                    price: itemPrice,
+                    basePrice: itemPrice, // Store base price for customization
+                    image: itemImage,
+                    quantity: 1
+                };
+                cartItems.push(newItem);
+                console.log('✅ NEW item added with quantity: 1');
+            }
+
+            // Save to localStorage
+            localStorage.setItem('amakiosk_cart', JSON.stringify(cartItems));
+            
+            // Update cart count - THIS IS THE TOTAL OF ALL QUANTITIES
+            cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+            console.log('📊 Total cart count:', cartCount, '(across', cartItems.length, 'unique items)');
+            
+            console.log('🔄 Now calling updateCartDisplay()...');
+            updateCartDisplay();
+            console.log('✅ updateCartDisplay() completed');
+            
+            console.log('🔔 Now calling showCartNotification()...');
+            showCartNotification(itemName);
+            console.log('✅ showCartNotification() completed');
+            console.log('========================================');
+            console.log('');
+        }
+
+        // Setup click handlers for menu items using EVENT DELEGATION (more reliable)
+        function setupMenuItemClickHandlers() {
+            console.log('🔧 Setting up menu item click handlers with EVENT DELEGATION...');
+            
+            const menuGrid = document.getElementById('menuGrid');
+            if (!menuGrid) {
+                console.error('❌ ERROR: menuGrid not found!');
+                return;
+            }
+            
+            console.log('✅ Found menuGrid, attaching click listener...');
+            
+            // Use event delegation - ONE listener on the parent
+            menuGrid.addEventListener('click', function(e) {
+                // Find if we clicked on a menu-item or inside one
+                const menuItem = e.target.closest('.menu-item');
+                
+                if (!menuItem) {
+                    console.log('Click was not on a menu item, ignoring...');
+                    return;
+                }
+                
+                // Don't navigate or bubble
+                e.preventDefault();
+                e.stopPropagation();
+                
+                console.log('');
+                console.log('🖱️🖱️🖱️ MENU ITEM CLICKED!!!');
+                console.log('Clicked element:', menuItem);
+                
+                const itemNameElement = menuItem.querySelector('.menu-item-name');
+                const itemPriceElement = menuItem.querySelector('.menu-item-price');
+                const itemImage = menuItem.querySelector('.menu-item-image');
+                
+                if (!itemNameElement || !itemPriceElement) {
+                    console.error('❌ Could not find item name or price!');
+                    return;
+                }
+                
+                const itemName = itemNameElement.textContent.trim();
+                const itemPriceText = itemPriceElement.textContent;
+                
+                console.log('Item name:', itemName);
+                console.log('Item price text:', itemPriceText);
+                
+                // Extract numeric price from text (e.g., "RM 7.50" => 7.50)
+                const priceMatch = itemPriceText.match(/[\d.]+/);
+                const itemPrice = priceMatch ? parseFloat(priceMatch[0]) : 0;
+                
+                console.log('Extracted price:', itemPrice);
+                
+                // Get image source
+                let imageSrc = '';
+                if (itemImage && itemImage.tagName === 'IMG') {
+                    imageSrc = itemImage.src;
+                }
+                
+                console.log('Image source:', imageSrc);
+                console.log('🚀 Now calling addToCart...');
+                
+                // Add directly to cart
+                addToCart(itemName, itemPrice, imageSrc);
+            }, true); // Use capture phase to ensure we get the event first
+            
+            console.log('✅✅✅ Event delegation click handler setup complete!');
+        }
+
+        // Scroll confirmation indicator functionality
+        let hasScrolled = false;
+
+        function updateScrollHighlights() {
+            const mainContent = document.querySelector('.main-content');
+            if (!mainContent) return;
+            
+            const scrollTop = mainContent.scrollTop;
+            const scrollHeight = mainContent.scrollHeight;
+            const clientHeight = mainContent.clientHeight;
+            const scrollBottom = scrollHeight - scrollTop - clientHeight;
+            
+            // Only show indicators after user has scrolled
+            if (scrollTop > 0 || scrollBottom < scrollHeight - clientHeight - 2) {
+                hasScrolled = true;
+            }
+            
+            // Top indicator: show ONLY when at very top (scrollTop === 0) AND user has scrolled
+            if (scrollTop === 0 && hasScrolled) {
+                mainContent.classList.add('at-top');
+            } else {
+                mainContent.classList.remove('at-top');
+            }
+            
+            // Bottom indicator: show ONLY when at very bottom (scrollBottom < 2) AND user has scrolled
+            if (scrollBottom < 2 && hasScrolled) {
+                mainContent.classList.add('at-bottom');
+            } else {
+                mainContent.classList.remove('at-bottom');
+            }
+            
+            console.log('Menu scroll state:', {
+                scrollTop,
+                scrollBottom,
+                atTop: scrollTop === 0,
+                atBottom: scrollBottom < 2,
+                hasScrolled: hasScrolled
+            });
+        }
+
+        // Load cart count from localStorage
+        function loadCartCount() {
+            const savedCart = localStorage.getItem('amakiosk_cart');
+            if (savedCart) {
+                try {
+                    const cartItems = JSON.parse(savedCart);
+                    cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+                    updateCartDisplay();
+                    console.log('Cart count loaded:', cartCount, 'items');
+                } catch (e) {
+                    console.error('Error loading cart:', e);
+                    cartCount = 0;
+                    updateCartDisplay();
+                }
+            } else {
+                cartCount = 0;
+                updateCartDisplay();
+            }
+        }
+
+        // This function is no longer needed - cart clearing is handled in DOMContentLoaded
+
+        // Update sidebar buttons based on language
+        function updateSidebarButtons() {
+            const currentLang = localStorage.getItem('kioskLanguage') || 'en';
+            const buttons = document.querySelectorAll('.category-btn');
+            
+            buttons.forEach(button => {
+                const category = button.getAttribute('onclick').match(/showCategory\('(\w+)'/)[1];
+                
+                if (currentLang === 'en') {
+                    // Show images for English
+                    if (category === 'rice') {
+                        button.innerHTML = '<img src="ricefont.png" alt="Rice">';
+                    } else if (category === 'noodles') {
+                        button.innerHTML = '<img src="noodfont.png" alt="Noodles">';
+                    } else if (category === 'sides') {
+                        button.innerHTML = '<img src="sidefont.png" alt="Sides">';
+                    } else if (category === 'drinks') {
+                        button.innerHTML = '<img src="drinkfont.png" alt="Drinks">';
+                    }
+                } else if (currentLang === 'ms') {
+                    // Show images for Malay
+                    if (category === 'rice') {
+                        button.innerHTML = '<img src="nasifont.png" alt="Rice">';
+                    } else if (category === 'noodles') {
+                        button.innerHTML = '<img src="mmfont.png" alt="Noodles">';
+                    } else if (category === 'sides') {
+                        button.innerHTML = '<img src="sampinganfont.png" alt="Sides">';
+                    } else if (category === 'drinks') {
+                        button.innerHTML = '<img src="minumanfont.png" alt="Drinks">';
+                    }
+                } else {
+                    // Show translated text for other languages
+                    button.innerHTML = t(category);
+                }
+            });
+        }
+
+        // Apply translations on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load cart count from localStorage FIRST (before clearing)
+            loadCartCount();
+            
+            // Only clear cart on actual refresh (F5), not on navigation
+            const isRefresh = performance.navigation.type === 1;
+            if (isRefresh) {
+                console.log('🔄 F5 refresh detected - clearing cart');
+                localStorage.removeItem('amakiosk_cart');
+                localStorage.removeItem('show_add_success');
+                localStorage.removeItem('added_item_name');
+                localStorage.removeItem('customize_item');
+                cartCount = 0;
+                updateCartDisplay();
+            } else {
+                console.log('📍 Normal navigation - keeping cart');
+            }
+            
+            updatePageTranslations();
+            updateSidebarButtons(); // Update sidebar buttons based on language
+            
+            // Initialize inactivity timer if function exists
+            if (typeof initializeInactivityTimer === 'function') {
+                initializeInactivityTimer();
+            }
+            
+            // Add scroll event listener to main content
+            const mainContent = document.querySelector('.main-content');
+            if (mainContent) {
+                mainContent.addEventListener('scroll', updateScrollHighlights);
+                // Initial check (won't show indicators because hasScrolled is false)
+                updateScrollHighlights();
+                console.log('Scroll indicators initialized');
+            }
+            
+            // Setup menu item click handlers
+            setupMenuItemClickHandlers();
+            
+            // Initialize with rice menu - MOVED INSIDE DOMContentLoaded
+            const firstButton = document.querySelector('.category-btn.active');
+            showCategory('rice', firstButton);
+            
+            // Request fullscreen for tablet/kiosk mode
+            // Note: Most browsers require user interaction, but we'll try on load
+            // For best results, install as PWA and open from home screen
+            if (document.documentElement.requestFullscreen) {
+                // Try to enter fullscreen (may require user gesture)
+                setTimeout(() => {
+                    document.documentElement.requestFullscreen().catch(err => {
+                        console.log('Fullscreen not available:', err);
+                    });
+                }, 500);
+            } else if (document.documentElement.webkitRequestFullscreen) {
+                // Safari/WebKit
+                setTimeout(() => {
+                    document.documentElement.webkitRequestFullscreen().catch(err => {
+                        console.log('Fullscreen not available:', err);
+                    });
+                }, 500);
+            } else if (document.documentElement.msRequestFullscreen) {
+                // IE/Edge
+                setTimeout(() => {
+                    document.documentElement.msRequestFullscreen().catch(err => {
+                        console.log('Fullscreen not available:', err);
+                    });
+                }, 500);
+            }
+        });
+
+        // Handle page show event (back navigation)
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                // Page was loaded from cache (back button)
+                console.log('Page shown from cache, reloading cart count...');
+                loadCartCount();
+            }
+        });
+
+    </script>
+</body>
+</html>
+
+
+
+
