@@ -2,7 +2,7 @@
   "name": "Ali, Muthu & Ah Hock Ken Mee Kiosk",
   "short_name": "AMAK Kiosk",
   "description": "Food ordering kiosk for Ali, Muthu & Ah Hock Ken Mee",
-  "start_url": "./index.html",
+  "start_url": "./flashpage.html",
   "scope": "./",
   "display": "fullscreen",
   "orientation": "portrait",
