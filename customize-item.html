@@ -1231,10 +1231,10 @@
                 return;
             }
             
-            // Initialize quantities to 0
+            // Initialize quantities: drinks (ice) default to 1, others to 0
             activeCustomizations.forEach(option => {
                 if (customizationQuantities[option.id] === undefined) {
-                    customizationQuantities[option.id] = 0;
+                    customizationQuantities[option.id] = (option.id === 'ice') ? 1 : 0;
                 }
             });
             
